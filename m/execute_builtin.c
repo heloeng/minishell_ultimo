@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execute_builtin.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: helde-so <helde-so@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/30 19:35:13 by helde-so          #+#    #+#             */
+/*   Updated: 2025/06/30 19:35:15 by helde-so         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "minishell.h"
 
@@ -44,6 +55,7 @@ int execute_builtin(t_data_val *data) //identifica se é um builtin e executa el
     }
     return (0); // não era builtin  shell deve seguir com execve()
 }
+
 
 int ft_exit(t_data_val *data)
 {
@@ -156,7 +168,6 @@ int is_n_flag(const char *str) // Verifica se o argumento é uma flag do tipo "-
     }
     return (1);
 }
-
 
 int analize_cd_arguments(t_data_val *data)
 {

@@ -1,3 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execute_builtin_export.c                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: helde-so <helde-so@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/30 19:34:55 by helde-so          #+#    #+#             */
+/*   Updated: 2025/06/30 19:34:56 by helde-so         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+
 #include "minishell.h"
 
 //!verificar se há necessidade de fazer export VAR E export sem argumento
