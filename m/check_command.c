@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_command.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dydaniel <dydaniel@student.42sp.org.b      +#+  +:+       +#+        */
+/*   By: helde-so <helde-so@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 14:58:11 by dydaniel          #+#    #+#             */
-/*   Updated: 2025/06/19 14:58:14 by dydaniel         ###   ########.fr       */
+/*   Updated: 2025/07/05 17:42:24 by helde-so         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,5 +67,8 @@ void exc_command(t_data_val *data)
         }
     }
     else
-        //excev(token)
+    {
+         //excev(token)
+    }
+       
 }

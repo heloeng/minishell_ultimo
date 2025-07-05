@@ -6,7 +6,7 @@
 /*   By: helde-so <helde-so@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 20:20:08 by dydaniel          #+#    #+#             */
-/*   Updated: 2025/06/30 18:53:09 by helde-so         ###   ########.fr       */
+/*   Updated: 2025/07/05 18:38:22 by helde-so         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ typedef struct s_data_val
 }   t_data_val;
 
 
+char *get_env_value(char *name, char **envp);
 void ft_unset(char ***envp, char *name);
 void    ft_putstr_fd(const char *s, int fd);
 int     ft_isalpha(int c);

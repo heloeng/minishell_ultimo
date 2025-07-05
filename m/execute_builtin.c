@@ -6,7 +6,7 @@
 /*   By: helde-so <helde-so@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 19:35:13 by helde-so          #+#    #+#             */
-/*   Updated: 2025/06/30 19:35:15 by helde-so         ###   ########.fr       */
+/*   Updated: 2025/07/05 19:37:11 by helde-so         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@ int execute_builtin(t_data_val *data) //identifica se é um builtin e executa el
     int i;
 
     i = 0;
-    // while (args[i] && ft_strchr(args[i], '='))
-    //     i++;
-    // if (!args[i])
-    //     return (0);
+    while (args[i] && ft_strchr(args[i], '='))
+        i++;
+    if (!args[i])
+        return (0);
     if(ft_strncmp(data->token[0], "exit", 5) == 0)
         return (ft_exit(data));
     if(ft_strncmp(data->token[0], "pwd", 4) == 0)
@@ -115,6 +115,8 @@ void ft_echo(t_data_val *data)
     int new_line;
     char *trimmed;
     int len;
+    char *var_name;
+    char *value;
 
     i = 1;
     new_line = 1;
@@ -127,6 +129,7 @@ void ft_echo(t_data_val *data)
     {
         //if (check $)
             //ft_printf(data->envp_var)
+        
         if (data->token[i][0] == '"' || data->token[i][0] == '\'')
         {
             len = ft_strlen(data->token[i]);
@@ -134,6 +137,12 @@ void ft_echo(t_data_val *data)
             ft_strlcpy(trimmed, data->token[i] + 1, len - 1);
             ft_printf("%s", trimmed);
             free(trimmed);
+        }
+        else if (data->token[i][0] == '$')
+        {
+        var_name = data->token[i] + 1;
+        value = get_env_value(var_name, data->envp);
+        ft_printf("%s", value);
         }
         else
             ft_printf("%s", data->token[i]);
@@ -196,4 +205,23 @@ int run_cd(char *path)
     getcwd(cwd, sizeof(cwd));  // cwd já está declarado no topo Obter novo diretório atual
     setenv( "PWD", cwd, 1); // / coloca o novo diretório atual
     return (0);
+}
+
+
+//função teste
+//falta validações
+char *get_env_value(char *name, char **envp)
+{
+	int     i;
+	size_t  len;
+
+	len = ft_strlen(name);//calcula o tamanho da variavel
+	i = 0;
+	while (envp[i])
+	{
+		if (!ft_strncmp(envp[i], name, len) && envp[i][len] == '=')
+			return (envp[i] + len + 1); // pula o "NAME=" e retorna valor
+		i++;
+	}
+	return (""); //retorna string vazia se não encontrar
 }
