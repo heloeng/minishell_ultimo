@@ -34,9 +34,13 @@ int num_tokens(char *text)
             c = *text;
             text++;
             while (*text && *text != c && *text != '\n')
+            {
                 text++;
+                if (*(text + 1) == c && ( *(text + 2) == '"' || *(text + 2) == '\''))
+                    text += 3;
+            }
             text++;
-        }        
+        }
     }
     return (j);
 }
@@ -44,7 +48,7 @@ int num_tokens(char *text)
 //Essa função é chamada quando for encontrado ' ou "
 //independente do que for encontrado é armazenado no char c
 //size = 1 e i = 1 para ja considerar (e pular) a aspa inicial
-int size_of_quote(char c, char *text)
+int size_of_quote(char c, char *text, int *follow_quote)
 {
     int size;
     int i;
@@ -53,7 +57,13 @@ int size_of_quote(char c, char *text)
     i = 1;
     while (text[i])
     {
-        if (text[i] == c)
+        if (text[i + 1] == c && (text[i + 2] == '"' || text[i + 2] == '\''))
+        {
+            c = text[i + 2];
+            i += 2;
+            *follow_quote += 2;
+        }
+        else if (text[i] == c)
             break;
         size++;
         i++;
@@ -86,13 +96,15 @@ void populate_token(char **token, char *text)
 {
     int j;
     int k;
+    int follow_quote;
     char c;
 
     k = 0;
+    follow_quote = 0;
     while (*text)
     {
         if (a_comma(&c, *text))
-            j = size_of_quote(c, text);// tamanho do token com aspas
+            j = size_of_quote(c, text, &follow_quote);// tamanho do token com aspas
         else if (*text)
             j = size_of_str(text);// tamanho do token de palavra
         token[k] = malloc(sizeof(char) * (j + 1));
@@ -101,9 +113,11 @@ void populate_token(char **token, char *text)
             ft_printf("failed\n");
             return ;
         }
-        if (*text)
+        if (*text && follow_quote == 0)
             ft_strlcpy(token[k], text, j + 1);//insere o token no array
-        text += j;
+        else 
+            ft_strcpy_quote(token[k], text, j + 1);
+        text += (j + follow_quote);
         k++;
         while (ft_isspace(*text))//ignora qualquer espaçamento
             text++;

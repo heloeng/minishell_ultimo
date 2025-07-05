@@ -18,17 +18,12 @@ int execute_builtin(t_data_val *data) //identifica se é um builtin e executa el
     int i;
 
     i = 0;
-    while (args[i] && ft_strchr(args[i], '='))
-    {
-        i++;
-    }
-    if (!args[i])
-        return (0);
-    
+    // while (args[i] && ft_strchr(args[i], '='))
+    //     i++;
+    // if (!args[i])
+    //     return (0);
     if(ft_strncmp(data->token[0], "exit", 5) == 0)
-    {
-        return (ft_exit(data)); 
-    }
+        return (ft_exit(data));
     if(ft_strncmp(data->token[0], "pwd", 4) == 0)
     {
         ft_pwd(data);
@@ -37,7 +32,7 @@ int execute_builtin(t_data_val *data) //identifica se é um builtin e executa el
      if(ft_strncmp(data->token[0], "env", 3) == 0)
     {
         ft_env(data);
-        return (1); 
+        return (1);
     }
     if (ft_strncmp(data->token[0], "echo", 4) == 0)
     {
@@ -50,53 +45,53 @@ int execute_builtin(t_data_val *data) //identifica se é um builtin e executa el
         return (1);
     }
     if (ft_strncmp(data->token[0], "export", 6) == 0)
-    {
 		return (ft_export(data->token, data));
-    }
-    return (0); // não era builtin  shell deve seguir com execve()
+    return (0);
 }
 
-
+//mensagem de permissão
 int ft_exit(t_data_val *data)
 {
     int exit_code;
 
-    ft_printf("exit\n");
     if (data->token[2])
     {
+        ft_printf("exit\n");
         ft_printf("minishell: exit: too many arguments\n");
-        return (1); // erro, mas não sai
+        return (1);
     }
-    else if (data->token[1])//Verifica primeiro se o argumento existe (data->token[1])
+    else if (data->token[1])
     {
-        if (ft_isnumeric(data->token[1]))//Depois, verifica se ele é numérico
+        if (ft_isnumeric(data->token[1]))
         {
-            exit_code = ft_atoi_base(data->token[1], 10);//ft_atoi_base() exige dois argumentos:  precisa dizer qual base numérica usar — e no caso de exit, é sempre base 10.
+            exit_code = ft_atoi_base(data->token[1], 10);
             exit(exit_code);
         }
         else
         {
-            ft_printf("minishell: exit: %s: numeric argument required\n", data->token[1]);
+            ft_printf("exit\n");
+            ft_printf("exit: %s: numeric argument required\n", data->token[1]);
             exit(255);
         }
     }
-    exit(0); // sem argumentos → exit 0
-    return (0); // nunca chega aqui, mas para evitar warning
+    exit(0);
+    return (0);
 }
 
-void ft_pwd(t_data_val *data)//Mostra o diretório atual do shell
+void ft_pwd(t_data_val *data)
 {
-    char cwd[PATH_MAX];
+    char cwd[1024];
     (void)data;
-if(getcwd(cwd, sizeof(cwd)) == NULL)
-{
-    ft_printf("pwd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory\n");
-    return;
-}
-   ft_putstr_fd(cwd, 1);
-   ft_putstr_fd("\n", 1);
+    if(getcwd(cwd, sizeof(cwd)) == NULL)
+    {
+        ft_printf("pwd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory\n");
+        return;
+    }
+    ft_putstr_fd(cwd, 1);
+    ft_putstr_fd("\n", 1);
 }
 
+// há outro erro de permissão denied
 void ft_env(t_data_val *data)
 {
     int i;
@@ -116,57 +111,38 @@ void ft_env(t_data_val *data)
 
 void ft_echo(t_data_val *data)
 {
-    char **args = data->token;
-    int newline;
     int i;
+    int new_line;
+    char *trimmed;
+    int len;
 
     i = 1;
-    newline = 1; 
-    while(args[i] && is_n_flag(args[i]))
+    new_line = 1;
+    while (ft_strncmp(data->token[i], "-n", 3) == 0)
     {
-        newline = 0; 
         i++;
+        new_line = 0;
     }
-    while (args[i])
+    while (data->token[i])
     {
-        char *s = args[i];
-        int   j = 0;
-
-        while (s[j])
+        //if (check $)
+            //ft_printf(data->envp_var)
+        if (data->token[i][0] == '"' || data->token[i][0] == '\'')
         {
-            if (s[j] != '"' && s[j] != '\'')
-                ft_printf("%c", s[j]);
-            j++;
+            len = ft_strlen(data->token[i]);
+            trimmed = malloc(sizeof(char) * (len - 2) + 1);
+            ft_strlcpy(trimmed, data->token[i] + 1, len - 1);
+            ft_printf("%s", trimmed);
+            free(trimmed);
         }
-
-        if (args[i + 1])
+        else
+            ft_printf("%s", data->token[i]);
+        if (data->token[i + 1])
             ft_printf(" ");
         i++;
-    }
-    if(newline)
-    {
+        }
+    if(new_line)
         ft_printf("\n");
-    }
-}
-
-int is_n_flag(const char *str) // Verifica se o argumento é uma flag do tipo "-n", "-nn", "-nnn"...
-{
-    int i; 
-    
-    i = 1; 
-    if (str[0] != '-') /
-        return (0);
-
-    if (str[1] == '\0') 
-        return (0);
-
-    while (str[i]) 
-    {
-        if (str[i] != 'n') 
-            return (0);
-        i++; 
-    }
-    return (1);
 }
 
 int analize_cd_arguments(t_data_val *data)
@@ -200,7 +176,7 @@ int analize_cd_arguments(t_data_val *data)
 
 int run_cd(char *path)
 {
-    char cwd[PATH_MAX];
+    char cwd[1024];
     char *oldpwd;
    
     oldpwd = getcwd(NULL, 0);// aloca dinamicamente o espaço necessário pra armazenar o caminho atual.
@@ -221,4 +197,3 @@ int run_cd(char *path)
     setenv( "PWD", cwd, 1); // / coloca o novo diretório atual
     return (0);
 }
-

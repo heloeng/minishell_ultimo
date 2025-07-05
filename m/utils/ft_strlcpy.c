@@ -32,3 +32,32 @@ size_t	ft_strlcpy(char *dest, const char *src, size_t size)
 	dest[i] = '\0';
 	return (s);
 }
+
+size_t ft_strcpy_quote(char *dest, const char *src, size_t size)
+{
+	size_t	i;
+	size_t	s;
+	size_t	j;
+	char c;
+
+	s = 0;
+	i = 0;
+	j = 0;
+	while (src[s])
+		s++;
+	if (size == 0)
+		return (s);
+	c = src[i];
+	while (i + 1 < s && (size - 1) > 0)
+	{
+		if ((src[i] == '"' || src[i] == '\'') && (src[i + 1] == '"' || src[i + 1] == '\''))
+			i += 2;
+		dest[j] = src[i];
+		i++;
+		j++;
+		size--;
+	}
+	dest[j] = c;
+	dest[j + 1] = '\0';
+	return (s);
+}

@@ -11,16 +11,16 @@ int ft_isnumeric(const char *str)
 
     if(str[0] == '\0')
     {
-        return (0);// string vazia = não é número
+        return (0);
     }
 
     i = 0;
     while(str[i])
     {
          if(!ft_isdigit((unsigned char)str[i]))
-            return (0);//não é numero
+            return (0);
          i++;
     }
-    return (1);  // todos os caracteres são dígitos  
+    return (1);
     
 }

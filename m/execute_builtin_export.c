@@ -42,9 +42,7 @@ int is_valid_identifier(char *arg)//função garante que o nome da variável sig
 
     i = 0;
     if(!ft_isalpha(arg[0]) && arg[0] != '_')
-    {
         return (0);// inválido se começar com número ou símbolo
-    }
     while(arg[i] && arg[i] != '=')
     {
         if(!ft_isalnum(arg[i]) && arg[i] != '_')
@@ -62,15 +60,12 @@ void	update_env(char ***envp, char *arg)
 	equal = ft_strchr(arg, '=');
 	if (!equal)
 		return; // Se não tiver '=', não faz nada
-
 	name = ft_substr(arg, 0, equal - arg);
-
 	if (replace_existing_var(*envp, name, arg))
 	{
 		free(name); // libera memória do nome
 		return;     // se substituiu, sai
 	}
-
 	add_new_var(envp, arg);	// Se não substituiu, adiciona uma nova variável
 	free(name); 
 }

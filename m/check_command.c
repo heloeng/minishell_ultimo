@@ -12,6 +12,20 @@
 
 #include "minishell.h"
 
+void handle_command(t_data_val *data)
+{
+   divide_arguments(&data->token, data->text);
+    if (execute_builtin(data))
+    {
+        free_tokens(&data->token);
+        free(data->fd);
+        return;
+    }
+    exc_command(data);
+    free_tokens(&data->token);
+    free(data->fd); 
+}
+
 char *check_path(char **token, char **envp)
 {
     char *path_env;
@@ -53,47 +67,5 @@ void exc_command(t_data_val *data)
         }
     }
     else
-        ft_printf("nao funfou\n");
-    i = 0;
-    while (data->parser && data->parser[i])
-    {
-        free_tokens(&data->parser[i]);
-        i++;
-    }
-    if (data->parser)
-    {
-        free(data->parser);
-        data->parser = NULL;
-    }
-    // if (!data->path)
-    // {
-    //     free(data->path);
-    //     free_tokens(&data->token);
-    //     ft_printf("not founded. \n");
-    //     return ;
-    // }
-    // if (data->child_pid == -1)
-    // {
-    //     perror("Failed to create fork.");
-    //     free(data->path);
-    //     free_tokens(&data->token);
-    //     exit(41);
-    // }
-    // else if (data->child_pid == 0)
-    // {
-    //     // dup2(data->fd[1], STDOUT_FILENO);
-    //     // close(data->fd[0]);
-    //     execve(data->path, data->token, data->envp);
-    //     perror("execve failed");
-    //     exit(EXIT_FAILURE);
-    // }
-    // else//AQUI É ONDE PRECISA TRATAR OS PIPES e coisas além
-    // {
-    //     waitpid(data->child_pid, NULL, 0);
-    //     // dup2(data->fd[0], STDIN_FILENO);
-    //     // close(data->fd[1]);
-    //     // free(data->path);
-    //     // data->path = check_path(&data->token[3], data->envp);
-    //     // execve(data->path, data->token + 2, data->envp);
-    // }
+        //excev(token)
 }

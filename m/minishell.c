@@ -12,8 +12,6 @@
 
 #include "minishell.h"  
 
-static void handle_command(t_data_val *data);
-
 void print_tokens(char **token)
 {
     int i;
@@ -54,20 +52,6 @@ int a_comma(char *c, char c_text)
     }
     else
         return (0);
-}
-
-static void handle_command(t_data_val *data)
-{
-   divide_arguments(&data->token, data->text);
-    if (execute_builtin(data))
-    {
-        free_tokens(&data->token);
-        free(data->fd);
-        return;
-    }
-    exc_command(data);
-    free_tokens(&data->token);
-    free(data->fd); 
 }
 
 void recive_inputs(t_data_val *data)
