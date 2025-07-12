@@ -47,6 +47,17 @@ typedef struct s_data_val
     pid_t *child_pid;
 }   t_data_val;
 
+//echo utils
+void print_single_quoted(char *token);
+void print_double_quoted(char *token, char **envp);
+void print_with_expansion(char *str, char **envp);
+int  handle_dollar_expansion(char *str, char **envp);
+void print_expanded_var(char *var_name, char **envp);
+
+//quote handling
+char	*complete_unclosed_quote(char *text);
+int		has_unclosed_quote(char *str);
+
 
 char *get_env_value(char *name, char **envp);
 void ft_unset(char ***envp, char *name);
@@ -64,7 +75,6 @@ int	ft_export(char **args, t_data_val *data);
 int analize_cd_arguments(t_data_val *data);
 int run_cd(char *path);
 void ft_echo(t_data_val *data);
-int is_n_flag(const char *str);
 void ft_env(t_data_val *data);
 void ft_pwd(t_data_val *data);
 int ft_exit(t_data_val *data);
@@ -72,6 +82,7 @@ int ft_isnumeric(const char *str);
 int	ft_isdigit(int c);
 int ft_isalnum(int c);
 
+void	ft_putchar_fd(char c, int fd);
 long	ft_atoi_base(const char *nptr, int base);
 char	**ft_split(char const *s, char c);
 char	*ft_strjoin(char const *s1, char const *s2);

@@ -56,16 +56,15 @@ int a_comma(char *c, char c_text)
 
 void recive_inputs(t_data_val *data)
 {
-    int i;
     while (1) 
     {
-        i = 0;
         data->text = readline("abc>>");  
         if (data->text == NULL)
         {
             write(STDOUT_FILENO, "exit\n", 5);
             break;
         }
+        data->text = complete_unclosed_quote(data->text);//INSERI ESSA LINHA
         if (data->text != NULL &&  num_tokens(data->text) > 0)
             add_history(data->text);
         if (strcmp(data->text, "exit") == 0)  

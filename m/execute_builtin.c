@@ -111,47 +111,31 @@ void ft_env(t_data_val *data)
 
 void ft_echo(t_data_val *data)
 {
-    int i;
-    int new_line;
-    char *trimmed;
-    int len;
-    char *var_name;
-    char *value;
+	int i;
+	int new_line;
 
-    i = 1;
-    new_line = 1;
-    while (ft_strncmp(data->token[i], "-n", 3) == 0)
-    {
-        i++;
-        new_line = 0;
-    }
-    while (data->token[i])
-    {
-        //if (check $)
-            //ft_printf(data->envp_var)
-        
-        if (data->token[i][0] == '"' || data->token[i][0] == '\'')
-        {
-            len = ft_strlen(data->token[i]);
-            trimmed = malloc(sizeof(char) * (len - 2) + 1);
-            ft_strlcpy(trimmed, data->token[i] + 1, len - 1);
-            ft_printf("%s", trimmed);
-            free(trimmed);
-        }
-        else if (data->token[i][0] == '$')
-        {
-        var_name = data->token[i] + 1;
-        value = get_env_value(var_name, data->envp);
-        ft_printf("%s", value);
-        }
-        else
-            ft_printf("%s", data->token[i]);
-        if (data->token[i + 1])
-            ft_printf(" ");
-        i++;
-        }
-    if(new_line)
-        ft_printf("\n");
+	i = 1;
+	new_line = 1;
+	while (data->token[i] && ft_strncmp(data->token[i], "-n", 3) == 0)
+	{
+		new_line = 0;
+		i++;
+	}
+	while (data->token[i])
+	{
+        if (data->token[i][0] == '\'' && data->token[i][ft_strlen(data->token[i]) - 1] == '\'')
+			print_single_quoted(data->token[i]);//trata tokens entre aspas simples (')
+		else if (data->token[i][0] == '"' && data->token[i][ft_strlen(data->token[i]) - 1] == '"')
+            print_double_quoted(data->token[i], data->envp);//trata tokens entre aspas duplas (")
+		else if (ft_strchr(data->token[i], '$'))// Caso: variável fora de aspas
+			print_with_expansion(data->token[i], data->envp);
+		else
+			ft_printf("%s", data->token[i]); // Caso: texto simples, sem aspas ou $
+		if (data->token[i + 1]) ft_printf(" ");
+		i++;
+	}
+	if (new_line)
+		ft_printf("\n");
 }
 
 int analize_cd_arguments(t_data_val *data)
@@ -225,3 +209,8 @@ char *get_env_value(char *name, char **envp)
 	}
 	return (""); //retorna string vazia se não encontrar
 }
+
+
+
+
+

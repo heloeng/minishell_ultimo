@@ -31,11 +31,16 @@ SOURCES = \
 	  $(DIR_UTILS)/ft_putstr_fd.c\
 	  $(DIR_UTILS)/ft_substr.c\
 	  $(DIR_UTILS)/ft_isalnum.c\
+	  $(DIR_UTILS)/ft_putchar_fd.c\
+	  $(DIR_UTILS)/quote_utils.c\
+	  $(DIR_UTILS)/echo_utils.c\
 	  minishell.c token.c check_command.c\
 	  configure_signals.c pipes_parser.c\
 	  execute_builtin_export.c\
 	  execute_builtin.c\
-	  execute_builtin_unset.c
+	  execute_builtin_unset.c\
+	  
+	  
 
 
 OBJECTS = $(SOURCES:.c=.o)
