@@ -61,6 +61,11 @@ void create_fds(t_data_val **data, int num_pipes)
     while (i < num_pipes)
     {
         (*data)->fd[i] = malloc(sizeof(int) * 2);
+        if (pipe((*data)->fd[i]) < 0)
+        {
+            perror("pipe");
+            exit(EXIT_FAILURE);
+        }
         i++;
     }
     (*data)->fd[i] = NULL;
