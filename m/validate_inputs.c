@@ -68,6 +68,9 @@ helde-so@Administrador:~$ echo oi |
 // 	return (0);
 // }
 
+int g_exit_status = 0;
+
+
 int validate_pipe_syntax(const char *input)
 {
 	if (starts_with_pipe(input))
@@ -106,8 +109,11 @@ int contains_double_pipe(const char *input)
 	{
 		if (input[i] == '|' && input[i + 1] == '|')
 		{
-			ft_printf("syntax error near unexpected token `||'\n");
-			return (1);
+			if (!char_inside_quotes(input, i)) // ignora se está entre aspas
+			{
+				ft_printf("syntax error near unexpected token `||'\n");
+				return (1);
+			}
 		}
 		i++;
 	}
@@ -118,19 +124,24 @@ int contains_double_pipe(const char *input)
 int contains_pipe_space_pipe(const char *input)
 {
 	int i;
+	int j;
 	
 	i = 0;
 	while (input[i])
 	{
 		if (input[i] == '|')
 		{
-			i++;
-			while (ft_isspace(input[i]))
-				i++;
-			if (input[i] == '|')
+			//Verifica se esse pipe está fora de aspas
+			if (!char_inside_quotes(input, i))
 			{
-				ft_printf("syntax error near unexpected token `|'\n");
-				return (1);
+				j = i + 1;
+				while (ft_isspace(input[j]))
+					j++;
+				if (input[j] == '|' && !char_inside_quotes(input, j))
+				{
+					ft_printf("syntax error near unexpected token `|'\n");
+					return (1);
+				}
 			}
 		}
 		i++;
@@ -152,4 +163,5 @@ int ends_with_pipe(const char *input)
 	}
 	return (0);
 }
+
 

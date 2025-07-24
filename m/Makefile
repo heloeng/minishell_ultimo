@@ -3,6 +3,8 @@ CC = cc
 DIR_PRINT = ft_printf
 LDFLAGS = -lreadline
 DIR_UTILS = utils
+SRC_DIR := src
+BUILDINS_DIR := $(SRC_DIR)/builtins
 FLAGS = -Wall -Werror -Wextra -I. -I${DIR_PRINT}
 SOURCES = \
 	  $(DIR_PRINT)/ft_print_dec_int.c \
@@ -33,12 +35,18 @@ SOURCES = \
 	  $(DIR_UTILS)/ft_isalnum.c\
 	  $(DIR_UTILS)/ft_putchar_fd.c\
 	  $(DIR_UTILS)/quote_utils.c\
-	  $(DIR_UTILS)/echo_utils.c\
+	  $(DIR_UTILS)/ft_itoa.c\
+	  $(DIR_UTILS)/ft_calloc.c\
+	  $(DIR_UTILS)/ft_bzero.c\
+	  $(DIR_UTILS)/ft_memset.c\
+	  $(BUILDINS_DIR)/echo.c \
+	  $(BUILDINS_DIR)/echo_utils.c \
+	  $(BUILDINS_DIR)/unset.c \
+	  $(BUILDINS_DIR)/unset_utils.c \
 	  minishell.c token.c check_command.c redir_heredoc.c\
 	  configure_signals.c pipes_parser.c get_path.c exec_childs.c\
 	  execute_builtin_export.c\
 	  execute_builtin.c\
-	  execute_builtin_unset.c\
 	  validate_inputs.c
 
 

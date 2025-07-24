@@ -10,10 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "minishell.h"
-
-//!verificar se há necessidade de fazer export VAR E export sem argumento
 
 int	ft_export(char **args, t_data_val *data)
 {

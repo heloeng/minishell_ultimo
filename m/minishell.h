@@ -48,6 +48,10 @@ typedef struct s_data_val
     pid_t *child_pid;
 }   t_data_val;
 
+
+//variavel global
+extern int g_exit_status;
+
 //validate pipe
 int validate_pipe_syntax(const char *input);
 int starts_with_pipe(const char *input);
@@ -62,13 +66,22 @@ void print_double_quoted(char *token, char **envp);
 void print_with_expansion(char *str, char **envp);
 int  handle_dollar_expansion(char *str, char **envp);
 void print_expanded_var(char *var_name, char **envp);
+char *remove_all_quotes(const char *token);
+
+//unset utils
+int ft_unset_args(char **args, t_data_val *data);
+char **build_new_env(char **old, const char *name);
+void ft_unset(char ***envp, char *name);
+
+
 
 //quote handling
 char	*complete_unclosed_quote(char *text);
 int		has_unclosed_quote(char *str);
+int char_inside_quotes(const char *str, int index);
+
 
 char *get_env_value(char *name, char **envp);
-void ft_unset(char ***envp, char *name);
 void    ft_putstr_fd(const char *s, int fd);
 int     ft_isalpha(int c);
 char   *ft_strchr(const char *s, int c);
@@ -92,6 +105,10 @@ int ft_isalnum(int c);
 
 void	ft_putchar_fd(char c, int fd);
 long	ft_atoi_base(const char *nptr, int base);
+char	*ft_itoa(int n);
+void	*ft_calloc(size_t nmemb, size_t size);
+void	*ft_memset(void *s, int c, size_t n);
+void	ft_bzero(void *s, size_t n);
 char	**ft_split(char const *s, char c);
 char	*ft_strjoin(char const *s1, char const *s2);
 size_t	ft_strlen(const char *s);
