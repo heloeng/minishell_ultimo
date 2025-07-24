@@ -58,6 +58,8 @@ void	update_env(char ***envp, char *arg)
 	if (!equal)
 		return; // Se não tiver '=', não faz nada
 	name = ft_substr(arg, 0, equal - arg);
+	if (!name)
+    	return;
 	if (replace_existing_var(*envp, name, arg))
 	{
 		free(name); // libera memória do nome
@@ -71,6 +73,7 @@ int	replace_existing_var(char **envp, char *name, char *arg)//Verifica se já ex
 {
 	int		i;
 	size_t	len;
+	char	*new_val;
 
 	i = 0;
 	len = ft_strlen(name);
@@ -78,9 +81,12 @@ int	replace_existing_var(char **envp, char *name, char *arg)//Verifica se já ex
 	{
 		if (!ft_strncmp(envp[i], name, len) && envp[i][len] == '=')
 		{
-			free(envp[i]);// Se encontrou, libera a antiga e coloca a nova
-			envp[i] = ft_strdup(arg);
-			return (1); // substituição feita
+			new_val = ft_strdup(arg);
+			if (!new_val)
+				return (0);
+			free(envp[i]);
+			envp[i] = new_val;
+			return (1);
 		}
 		i++;
 	}
@@ -102,12 +108,14 @@ void	add_new_var(char ***envp, char *arg)
 	i = 0;
 	while (i < count)
 	{
-		new_env[i] = (*envp)[i];
+		new_env[i] = ft_strdup((*envp)[i]);
 		i++;
 	}
 	new_env[count] = ft_strdup(arg);
 	new_env[count + 1] = NULL;
-
+	i = 0;
+	while ((*envp)[i])
+		free((*envp)[i++]);
 	free(*envp);
 	*envp = new_env;
 }

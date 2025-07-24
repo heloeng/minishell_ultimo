@@ -52,8 +52,6 @@ char **build_new_env(char **old, const char *name)
 	{
 		if(!(ft_strncmp(old[i], name, len) == 0 && old[i][len] == '='))
 			new[j++] = ft_strdup(old[i]);
-		else
-			free(old[i]);
 		i++;
 	}
 	new[j] = NULL;

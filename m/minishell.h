@@ -49,8 +49,11 @@ typedef struct s_data_val
 }   t_data_val;
 
 
+
 //variavel global
 extern int g_exit_status;
+
+char **duplicate_envp(char **envp);
 
 //validate pipe
 int validate_pipe_syntax(const char *input);

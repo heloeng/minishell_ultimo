@@ -88,7 +88,8 @@ void recive_inputs(t_data_val *data)
 //o resto do programa
 void init_data(t_data_val **data, char **envp)
 {
-    (*data)->envp = envp;
+    // (*data)->envp = envp;
+    (*data)->envp = duplicate_envp(envp);
     (*data)->fd = NULL;
     (*data)->text = NULL;
     (*data)->token = NULL;

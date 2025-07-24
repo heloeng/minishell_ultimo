@@ -47,7 +47,8 @@ SOURCES = \
 	  configure_signals.c pipes_parser.c get_path.c exec_childs.c\
 	  execute_builtin_export.c\
 	  execute_builtin.c\
-	  validate_inputs.c
+	  validate_inputs.c\
+	  duplicate_envp.c
 
 
 OBJECTS = $(SOURCES:.c=.o)

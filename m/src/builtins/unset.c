@@ -16,7 +16,6 @@ void ft_unset(char ***envp, char *name)
 {
 	char **old;
 	char **new;
-	int i;
 
 	if (!envp || !*envp || !name)
 		return;
@@ -25,10 +24,6 @@ void ft_unset(char ***envp, char *name)
 	new = build_new_env(old, name);
 	if (!new)
 		return;
-
-	i = 0;
-	while (old[i])
-		free(old[i++]);
 	free(old); 
 	*envp = new;
 }

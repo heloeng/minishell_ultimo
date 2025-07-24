@@ -10,8 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include<stdlib.h>
-#include<stddef.h>
 #include "../minishell.h"
 
 void	*ft_memcpy_str(void *dest, const char *src, size_t n)
