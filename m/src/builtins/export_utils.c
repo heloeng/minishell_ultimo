@@ -12,26 +12,6 @@
 
 #include "minishell.h"
 
-int	ft_export(char **args, t_data_val *data)
-{
-    int i;
-	int status;
-
-	status = 0;
-    i = 1;
-    while(args[i])
-    {
-        if(!is_valid_identifier(args[i]))
-		{
-            ft_printf("export: %s: not a valid identifier\n", args[i]);
-            status = 1; 
-		} 
-        else
-            update_env(&data->envp, args[i]);
-        i++;
-    }
-    return (status);
-}
 
 int is_valid_identifier(char *arg)//função garante que o nome da variável siga o padrão do bash:
 {
@@ -48,6 +28,7 @@ int is_valid_identifier(char *arg)//função garante que o nome da variável sig
     }
     return (1);
 }
+
 
 void	update_env(char ***envp, char *arg)
 {
@@ -92,6 +73,8 @@ int	replace_existing_var(char **envp, char *name, char *arg)//Verifica se já ex
 	}
 	return (0); // não encontrou para substituir
 }
+
+
 
 void	add_new_var(char ***envp, char *arg)
 {

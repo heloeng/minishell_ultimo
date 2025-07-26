@@ -43,9 +43,10 @@ SOURCES = \
 	  $(BUILDINS_DIR)/echo_utils.c \
 	  $(BUILDINS_DIR)/unset.c \
 	  $(BUILDINS_DIR)/unset_utils.c \
+	  $(BUILDINS_DIR)/export.c \
+	  $(BUILDINS_DIR)/export_utils.c \
 	  minishell.c token.c check_command.c redir_heredoc.c\
 	  configure_signals.c pipes_parser.c get_path.c exec_childs.c\
-	  execute_builtin_export.c\
 	  execute_builtin.c\
 	  validate_inputs.c\
 	  duplicate_envp.c

@@ -41,7 +41,8 @@ int execute_builtin(t_data_val *data) //identifica se é um builtin e executa el
     }
     if(ft_strncmp(data->token[0], "cd", 2) == 0)
     {
-        analize_cd_arguments(data);
+        // analize_cd_arguments(data);
+        g_exit_status = analize_cd_arguments(data);
         return (1);
     }
     if (ft_strncmp(data->token[0], "unset", 5) == 0)
@@ -50,7 +51,9 @@ int execute_builtin(t_data_val *data) //identifica se é um builtin e executa el
         return (1); 
     }
     if (ft_strncmp(data->token[0], "export", 6) == 0)
-		return (ft_export(data->token, data));
+		// return (ft_export(data->token, data));
+		g_exit_status = ft_export(data->token, data);
+        return (1);
     return (0);// não é builtin
     
 }
@@ -150,61 +153,111 @@ void ft_env(t_data_val *data)
 // 		ft_printf("\n");
 // }
 
-int analize_cd_arguments(t_data_val *data)
+//!função anterior
+// int analize_cd_arguments(t_data_val *data)
+// {
+//     char *path;
+
+//     path = NULL;
+//     if(data->token[1] == NULL) 
+//     {
+//         path = getenv("HOME");
+//         return (run_cd(path));
+//     }
+//     if (ft_strncmp(data->token[1], "-", 2) == 0)// cd -
+//     {
+//         path = getenv("OLDPWD");
+//         if (!path)
+//         {
+//             ft_printf("cd: OLDPWD not set\n");
+//             return (1);
+//         }
+//     ft_printf("%s\n", path);
+//     return (run_cd(path));
+//     }
+//     if(data->token[1][0] == '~')//cd ~ ou ~/Documentos - data->token[1][0]
+//     {
+//         path = getenv("HOME");
+//         return (run_cd(path));
+//     }
+//     return (run_cd(data->token[1]));
+// }
+
+int analize_cd_arguments(t_data_val *d)
 {
     char *path;
+    
+    path = d->token[1];
+    // muitos argumento 
+    if (d->token[2])
+    {
+        ft_putstr_fd("cd: too many arguments\n", 2);
+        return 1;
+    }
 
-    path = NULL;
-    if(data->token[1] == NULL) 
-    {
-        path = getenv("HOME");
-        return (run_cd(path));
-    }
-    if (ft_strncmp(data->token[1], "-", 2) == 0)// cd -
-    {
-        path = getenv("OLDPWD");
-        if (!path)
-        {
-            ft_printf("cd: OLDPWD not set\n");
-            return (1);
-        }
-    ft_printf("%s\n", path);
-    return (run_cd(path));
-    }
-    if(data->token[1][0] == '~')//cd ~ ou ~/Documentos - data->token[1][0]
-    {
-        path = getenv("HOME");
-        return (run_cd(path));
-    }
-    return (run_cd(data->token[1]));
+    /* ---- cd sem argumento vira HOME ---- */
+    if (!path || !*path)
+        path = get_env_value("HOME", d->envp);
+
+    //delega a run_cd() 
+    return run_cd(path);   
 }
+
+
+// int run_cd(char *path)
+// {
+//     char cwd[1024];
+//     char *oldpwd;
+   
+//     oldpwd = getcwd(NULL, 0);// aloca dinamicamente o espaço necessário pra armazenar o caminho atual.
+//     {
+//         perror("cd");
+//         return (1);
+//     }
+//     if(chdir(path) != 0)//chdir() altera o diretório atual do processo para o caminho passado em path.
+//     {
+//         perror("cd");
+//         free(oldpwd);
+//         return (1);
+//     }
+
+//     setenv( "OLDPWD", oldpwd, 1); // coloca o diretorio anterior
+//     free(oldpwd);
+//     getcwd(cwd, sizeof(cwd));  // cwd já está declarado no topo Obter novo diretório atual
+//     setenv( "PWD", cwd, 1); // / coloca o novo diretório atual
+//     return (0);
+// }
 
 int run_cd(char *path)
 {
     char cwd[1024];
     char *oldpwd;
    
-    oldpwd = getcwd(NULL, 0);// aloca dinamicamente o espaço necessário pra armazenar o caminho atual.
+    oldpwd = getcwd(NULL, 0);
+    if (!oldpwd)                         /* getcwd falhou */
     {
         perror("cd");
-        return (1);
-    }
-    if(chdir(path) != 0)//chdir() altera o diretório atual do processo para o caminho passado em path.
-    {
-        perror("cd");
-        free(oldpwd);
-        return (1);
+        return 1;
     }
 
-    setenv( "OLDPWD", oldpwd, 1); // coloca o diretorio anterior
+    if (chdir(path) == -1)               /* diretório inválido */
+    {
+        perror("cd");                   /* "cd: … No such file or directory" */
+        free(oldpwd);
+        return 1;
+    }
+
+    /* atualiza OLDPWD e PWD */
+    setenv("OLDPWD", oldpwd, 1);
     free(oldpwd);
-    getcwd(cwd, sizeof(cwd));  // cwd já está declarado no topo Obter novo diretório atual
-    setenv( "PWD", cwd, 1); // / coloca o novo diretório atual
-    return (0);
+
+    if (getcwd(cwd, sizeof(cwd)))
+        setenv("PWD", cwd, 1);
+
+    return 0;                            /* sucesso */
 }
 
 
-//função teste
 //falta validações
 char *get_env_value(char *name, char **envp)
 {
