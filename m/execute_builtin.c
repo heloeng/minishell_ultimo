@@ -6,7 +6,7 @@
 /*   By: helde-so <helde-so@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 19:35:13 by helde-so          #+#    #+#             */
-/*   Updated: 2025/07/05 19:37:11 by helde-so         ###   ########.fr       */
+/*   Updated: 2025/07/26 12:04:51 by helde-so         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,144 +118,54 @@ void ft_env(t_data_val *data)
     }
 }
 
-// void ft_echo(t_data_val *data)
-// {
-// 	int i;
-// 	int new_line;
-//     char *clean;
-
-// 	i = 1;
-// 	new_line = 1;
-// 	while (data->token[i] && ft_strncmp(data->token[i], "-n", 3) == 0)
-// 	{
-// 		new_line = 0;
-// 		i++;
-// 	}
-// 	while (data->token[i])
-// 	{
-//         if (data->token[i][0] == '\'' && data->token[i][ft_strlen(data->token[i]) - 1] == '\'')
-// 			print_single_quoted(data->token[i]);//trata tokens entre aspas simples (')
-// 		else if (data->token[i][0] == '"' && data->token[i][ft_strlen(data->token[i]) - 1] == '"')
-//             print_double_quoted(data->token[i], data->envp);//trata tokens entre aspas duplas (")
-// 		else if (ft_strchr(data->token[i], '$'))// Caso: variável fora de aspas
-// 			print_with_expansion(data->token[i], data->envp);
-// 		else
-//         {
-//             clean = remove_all_quotes(data->token[i]);
-// 			// ft_printf("%s", data->token[i]); // Caso: texto simples, sem aspas ou $
-// 			ft_printf("%s", clean); // Caso: texto simples, sem aspas ou $
-//             free(clean);
-//         }
-// 		if (data->token[i + 1]) ft_printf(" ");
-// 		i++;
-// 	}
-// 	if (new_line)
-// 		ft_printf("\n");
-// }
-
-//!função anterior
-// int analize_cd_arguments(t_data_val *data)
-// {
-//     char *path;
-
-//     path = NULL;
-//     if(data->token[1] == NULL) 
-//     {
-//         path = getenv("HOME");
-//         return (run_cd(path));
-//     }
-//     if (ft_strncmp(data->token[1], "-", 2) == 0)// cd -
-//     {
-//         path = getenv("OLDPWD");
-//         if (!path)
-//         {
-//             ft_printf("cd: OLDPWD not set\n");
-//             return (1);
-//         }
-//     ft_printf("%s\n", path);
-//     return (run_cd(path));
-//     }
-//     if(data->token[1][0] == '~')//cd ~ ou ~/Documentos - data->token[1][0]
-//     {
-//         path = getenv("HOME");
-//         return (run_cd(path));
-//     }
-//     return (run_cd(data->token[1]));
-// }
+/*
 
 int analize_cd_arguments(t_data_val *d)
 {
     char *path;
     
     path = d->token[1];
-    // muitos argumento 
-    if (d->token[2])
+    if (d->token[2])//muitos argumento 
     {
         ft_putstr_fd("cd: too many arguments\n", 2);
         return 1;
     }
-
-    /* ---- cd sem argumento vira HOME ---- */
-    if (!path || !*path)
+    if (!path || !*path)//cd sem argumento vira HOME
         path = get_env_value("HOME", d->envp);
-
-    //delega a run_cd() 
     return run_cd(path);   
 }
+*/
 
-
-// int run_cd(char *path)
-// {
-//     char cwd[1024];
-//     char *oldpwd;
-   
-//     oldpwd = getcwd(NULL, 0);// aloca dinamicamente o espaço necessário pra armazenar o caminho atual.
-//     {
-//         perror("cd");
-//         return (1);
-//     }
-//     if(chdir(path) != 0)//chdir() altera o diretório atual do processo para o caminho passado em path.
-//     {
-//         perror("cd");
-//         free(oldpwd);
-//         return (1);
-//     }
-
-//     setenv( "OLDPWD", oldpwd, 1); // coloca o diretorio anterior
-//     free(oldpwd);
-//     getcwd(cwd, sizeof(cwd));  // cwd já está declarado no topo Obter novo diretório atual
-//     setenv( "PWD", cwd, 1); // / coloca o novo diretório atual
-//     return (0);
-// }
-
+/*
 int run_cd(char *path)
 {
     char cwd[1024];
     char *oldpwd;
    
     oldpwd = getcwd(NULL, 0);
-    if (!oldpwd)                         /* getcwd falhou */
+    if (!oldpwd)                       
     {
         perror("cd");
         return 1;
     }
 
-    if (chdir(path) == -1)               /* diretório inválido */
+    if (chdir(path) == -1)             
     {
-        perror("cd");                   /* "cd: … No such file or directory" */
+        perror("cd");                   
         free(oldpwd);
         return 1;
     }
 
-    /* atualiza OLDPWD e PWD */
+    //atualiza OLDPWD e PWD 
     setenv("OLDPWD", oldpwd, 1);
     free(oldpwd);
 
     if (getcwd(cwd, sizeof(cwd)))
         setenv("PWD", cwd, 1);
 
-    return 0;                            /* sucesso */
+    return 0;                            
 }
+*/
 
 
 //falta validações

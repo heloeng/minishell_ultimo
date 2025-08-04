@@ -1,6 +1,6 @@
 
 #include "minishell.h"
-
+//!DIMINUIR FUNCAO
 void ft_echo(t_data_val *data)
 {
 	int i;

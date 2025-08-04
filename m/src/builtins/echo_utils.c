@@ -6,7 +6,7 @@
 /*   By: helde-so <helde-so@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 17:44:50 by helde-so          #+#    #+#             */
-/*   Updated: 2025/07/15 17:44:55 by helde-so         ###   ########.fr       */
+/*   Updated: 2025/07/26 13:59:01 by helde-so         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,32 +60,27 @@ porque aspas simples são tratadas em print_single_quoted.
 */
 void print_with_expansion(char *str, char **envp)
 {
-	int i;//índice para percorrer str.
-	int inc;  //quantas posições i deve avançar após processar um $.
-	char *exit_str; //string que conterá o valor convertido de g_exit_status via ft_itoa.
-
-	//Verifica se a string inteira é exatamente "$?" (com \0 no final), ou seja, echo "$?".
-	// Caso especial: "$?" sozinho
-	// if(ft_strncmp(str, "$?", 3) == 0)//Se for "$?": echo $? ou echo "$?"
+	int i;
+	int inc;  
+	char *exit_str; 
 	if (ft_strncmp(str, "$?", 2) == 0 && str[2] == '\0')
 	{
-		exit_str = ft_itoa(g_exit_status);//Converte g_exit_status para string.
-		ft_printf("%s", exit_str);//Imprime.
-		free(exit_str);//Libera a memória.
-		return;//Sai da função, pois nada mais precisa ser impresso.
+		exit_str = ft_itoa(g_exit_status);
+		ft_printf("%s", exit_str);
+		free(exit_str);
+		return;
 	}
 
-	//Começa a percorrer a string caractere por caractere até o fim (\0).
 	i = 0;
 	while (str[i])
 	{
-		inc = 1;//Por padrão, o índice vai andar 1 caractere por vez (caso não encontre $).
-		// Só expande se for '$' fora de aspas simples : echo $USER ou echo "User: $USER"
+		inc = 1;
+		
 		if (str[i] == '$' && !char_inside_quotes(str, i))
-			inc = handle_dollar_expansion(str + i, envp);//Chama handle_dollar_expansion, que imprime o valor da variável (se existir).
-		else// Se não for $, imprime o caractere atual como está (normal).
+			inc = handle_dollar_expansion(str + i, envp);
+		else
 			ft_putchar_fd(str[i], 1);
-		i += inc;//Avança o índice conforme o valor de inc.
+		i += inc;
 	}
 }
 
@@ -94,14 +89,14 @@ int handle_dollar_expansion(char *str, char **envp)
 {
 	int len;
 	char *var_name;
-	char *exit_str; //string que conterá o valor convertido de g_exit_status via ft_itoa.
+	char *exit_str; 
 	
-	if (str[1] == '?')  // caso especial para $?
+	if (str[1] == '?')  // caso especial para $
 	{
 		exit_str = ft_itoa(g_exit_status); // converte código de saída
-		ft_printf("%s", exit_str);               // imprime o valor
-		free(exit_str);                          // libera memória
-		return (2);                              // pula "$?"
+		ft_printf("%s", exit_str);               
+		free(exit_str);                         
+		return (2);                            
 	}
 	len = 0;
 	while (str[1 + len] && (ft_isalnum(str[1 + len]) || str[1 + len] == '_'))

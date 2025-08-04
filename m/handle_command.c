@@ -15,19 +15,21 @@
 void handle_command(t_data_val *data)
 {
     divide_arguments(&data->token, data->text);
-    if (execute_builtin(data))
+    // if (execute_builtin(data))
+    // {
+    //     free_tokens(&data->token);
+    //     free(data->fd);
+    //     return;
+    // }
+    if (!ft_strchr(data->text, '|') && execute_builtin(data))
     {
         free_tokens(&data->token);
         free(data->fd);
         return;
     }
-    // if (check_redir_herdoc(data->token))
-    // {
-    //     ft_printf("pode chamar herdioc\n");
-    // }
     exc_command(data);
     free_tokens(&data->token);
-    free(data->fd); 
+    free(data->fd);
 }
 
 void close_fds(int **fd, int i)
@@ -46,14 +48,38 @@ void close_fds(int **fd, int i)
     }
 }
 
+void exec_pipes(t_data_val *data, int i, int *status)
+{
+    while (i <= data->num_pipes)
+    {
+        data->child_pid[i] = fork();
+        if (data->child_pid[i] < 0)
+            printf("ERROR ON CREATING CHILD PROCESS!\n");
+        else if (data->child_pid[i] == 0)
+            exec_child_process(data, i);
+        i++;
+    }
+    i = 0;
+    while (data->fd[i] && i <= data->num_pipes)
+    {
+        close(data->fd[i][0]);
+        close(data->fd[i][1]);
+        i++;
+    }
+    i = 0;
+    while (data->child_pid[i] && i <= data->num_pipes)
+    {
+        waitpid(data->child_pid[i], status, 0);
+        i++;
+    }
+}
+
 void exc_command(t_data_val *data)
 {
     int i;
-    //int j;
     int status;
 
     i = 0;
-    //j = 0;
     parse_token(&data);
     get_full_path(&data);
     data->child_pid = malloc(sizeof(pid_t) * (data->num_pipes + 1));
@@ -61,28 +87,7 @@ void exc_command(t_data_val *data)
         ft_printf("ERROR\n");
     if (data->parser)
     {
-        while (i <= data->num_pipes)
-        {
-            data->child_pid[i] = fork();
-            if (data->child_pid[i] < 0)
-                ft_printf("ERROR ON CREATING CHILD PROCESS!\n");
-            else if (data->child_pid[i] == 0)
-                exec_child_process(data, i);
-            i++;
-        }
-        i = 0;
-        while (data->fd[i] && i <= data->num_pipes)
-        {
-                close(data->fd[i][0]);
-                close(data->fd[i][1]);
-                i++;
-        }
-        i = 0;
-        while (data->child_pid[i] && i <= data->num_pipes)
-        {
-            waitpid(data->child_pid[i], &status, 0);
-            i++;
-        }
+        exec_pipes(data, i, &status);
     }
     else
         exec_one_command(data, &status);

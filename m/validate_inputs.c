@@ -6,68 +6,13 @@
 /*   By: helde-so <helde-so@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 19:04:23 by helde-so          #+#    #+#             */
-/*   Updated: 2025/07/15 21:03:56 by helde-so         ###   ########.fr       */
+/*   Updated: 2025/07/26 14:12:48 by helde-so         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/*verificar esse teste
-helde-so@Administrador:~$ echo oi |
-> |
-*/
-
 #include "minishell.h"
 
-// int validate_pipe_syntax(const char *input)
-// {
-// 	int i;
-
-// 	i = 0;// começa com '|'
-// 	while (ft_isspace(input[i]))
-// 		i++;
-// 	if(input[i] == '|' )
-// 	{
-// 		ft_printf("syntax error near unexpected token `|'\n");
-// 		return (1);
-// 	}
-// 	i = 0; //contém "||"
-// 	while (input[i]) 
-// 	{
-// 		if (input[i] == '|' && input[i + 1] == '|')
-// 		{
-// 			ft_printf("syntax error near unexpected token `||'\n");
-// 			return (1);
-// 		}
-// 		i++;
-// 	}
-	
-// 	i = 0;// contém  "|   |"
-// 	while (input[i])
-// 	{
-// 		if (input[i] == '|')
-// 		{
-// 			i++; // Avança após o primeiro pipe
-// 			while (ft_isspace(input[i]))
-// 				i++; // Pula espaços
-// 			if (input[i] == '|')
-// 			{
-// 				ft_printf("syntax error near unexpected token `|'\n");
-// 				return (1);
-// 			}
-// 		}
-// 		i++;
-// 	}
-// 		// Verifica se termina com '|'
-// 	i = ft_strlen(input) - 1;
-// 	while (i >= 0 && ft_isspace(input[i]))
-// 		i--;
-// 	if (i >= 0 && input[i] == '|')
-// 	{
-// 		ft_printf("syntax error near unexpected token `|'\n");
-// 		return (1);
-// 	}	
-// 	return (0);
-// }
-
+//guarda o status de saída do último comando executado
 int g_exit_status = 0;
 
 

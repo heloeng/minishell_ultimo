@@ -24,6 +24,7 @@
 #include <sys/types.h> 
 #include <sys/wait.h>  
 #include <limits.h>
+#include <fcntl.h> 
 
 /* Estrutura para armazenar dados
 fd[2] -> usado no pipe. Necessário para exercutar comando de |
@@ -48,7 +49,14 @@ typedef struct s_data_val
     pid_t *child_pid;
 }   t_data_val;
 
-
+typedef enum e_redir_heredoc
+{
+    NO_RD_HD,
+    RD_IN,
+    RD_OUT,
+    APPEND,
+    HEREDOC
+}   t_redir_heredoc;
 
 //variavel global
 extern int g_exit_status;
@@ -127,7 +135,8 @@ void    handle_ctrlc(int sig);
 void divide_arguments(char ***token, char *text);
 int num_tokens(char *text);
 void free_tokens(char ***token);
-void populate_token(char **token, char *text);
+void populate_token(char **token, char *text, int n_token);
+int is_operator(char *text);
 int size_of_str(char *text);
 int a_comma(char *c, char c_text);
 char *check_path(t_data_val *data, char *cmd);
@@ -136,7 +145,16 @@ void free_parser(t_data_val *data);
 void exec_child_process(t_data_val *data, int i);
 void exec_one_command(t_data_val *data, int *status);
 void get_full_path(t_data_val **data);
-int check_redir_herdoc(char **token);
+int check_redir_herdoc(t_data_val *data, int i);
+void change_fd(t_data_val *data, int redir_heredoc, int i, int j);
+char **clear_parser(char **parser);
+int solo_command_redir_heredoc(char **token, int i);
+void pipe_heredoc(t_data_val *data, char **parser, int j, int i);
+void solo_heredoc_fd(char **token, int i, int *fd);
+void close_unused_fd(t_data_val *data, int i);
+void first_pipe(t_data_val *data, int flag, int i);
+void middles_pipe(t_data_val *data, int flag, int i);
+void last_pipe(t_data_val *data, int flag, int i);
 //remove
 void print_tokens(char **token);
 void parse_token(t_data_val **data);

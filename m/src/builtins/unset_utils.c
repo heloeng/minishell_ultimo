@@ -3,20 +3,13 @@
 
 /*
 args	char **	O vetor de argumentos do usuário (ex: unset VAR1 VAR2)
-data	t_data_val *	Sua struct principal, que contém o envp atual
+data	t_data_val * Struct principal, que contém o envp atual
 unset HELLO HOME PATH
 args[0] = "unset"
 args[1] = "HELLO"
 args[2] = "HOME"
 args[3] = "PATH"
 args[4] = NULL
-
-A função ft_unset_args vai percorrer de i = 1 em diante, chamando:
-ft_unset(&data->envp, "VAR1");
-ft_unset(&data->envp, "VAR2");
-ft_unset(&data->envp, "VAR3");
-Ela ignora o args[0] ("unset") e começa do índice 1, 
-removendo cada nome do ambiente.
 */
 int ft_unset_args(char **args, t_data_val *data)
 {
@@ -29,7 +22,6 @@ int ft_unset_args(char **args, t_data_val *data)
 	}
 	return (0); // sucesso (exit code 0)
 }
-
 
 // cria um novo envp sem a variável name.
 char **build_new_env(char **old, const char *name)

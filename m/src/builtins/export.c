@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execute_builtin_export.c                           :+:      :+:    :+:   */
+/*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: helde-so <helde-so@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 19:34:55 by helde-so          #+#    #+#             */
-/*   Updated: 2025/06/30 19:34:56 by helde-so         ###   ########.fr       */
+/*   Updated: 2025/07/26 14:03:01 by helde-so         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
+//!MINUIR FUNCAO
 int	ft_export(char **args, t_data_val *data)
 {
     int i;
@@ -38,8 +38,7 @@ int	ft_export(char **args, t_data_val *data)
             }
             else                                    
                 update_env(&data->envp, args[i]);
-        }
-		     
+        }     
         i++;
     }
     return (status);

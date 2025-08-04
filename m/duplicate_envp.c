@@ -1,14 +1,11 @@
 #include "minishell.h"
 
 /*
-Criar uma cópia independente do array envp (as variáveis 
-de ambiente passadas pelo main()), 
-para que seu shell (minishell) possa modificá-las com segurança.
+Cria uma cópia independente do array envp (passadas no main()), 
+para que o (minishell) modifique com segurança.
 O envp original recebido no main() foi criado pelo sistema operacional, 
-e não pode fazer free(), realloc() ou strdup() sobre 
-os elementos diretamente sem causar alguns erros:
+e não pode fazer free(), realloc() ou strdup() , pois da erros como:
 invalid pointer, munmap_chunk() , core dumped
-exemp de erro. data->envp = envp; free(envp[i]); // 💥 crash!
 */
 char **duplicate_envp(char **envp)
 {
