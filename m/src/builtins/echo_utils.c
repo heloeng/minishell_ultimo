@@ -12,11 +12,7 @@
 
 #include "minishell.h"
 
-/*
-trata tokens entre aspas simples (')
-Remove as aspas simples do início e do fim
-Imprime o conteúdo, sem expandir variáveis
-*/
+
 void print_single_quoted(char *token)
 {
 	char *trimmed;
@@ -31,13 +27,7 @@ void print_single_quoted(char *token)
 	free(trimmed);
 }
 
-
-/*
-trata tokens entre aspas duplas (")
-Remove as aspas duplas do início e do fim
-Chama a função print_with_expansion() para expandir as variáveis
-*/
-void print_double_quoted(char *token, char **envp)
+void print_double_quoted(char *token, t_data_val *data)
 {
 	char *trimmed;
 	int len;
@@ -47,25 +37,19 @@ void print_double_quoted(char *token, char **envp)
 	if (!trimmed)
 		return;
 	ft_strlcpy(trimmed, token + 1, len - 1);
-	print_with_expansion(trimmed, envp);
+	print_with_expansion(trimmed, data);
 	free(trimmed);
 }
 
-/*
-percorre a string e expande a variavel iniciada com $
-imprime uma string com possível expansão de variáveis ($VAR) 
-e do código de saída ($?)
-É chamada apenas quando o conteúdo está dentro de aspas duplas ("), 
-porque aspas simples são tratadas em print_single_quoted.
-*/
-void print_with_expansion(char *str, char **envp)
+void print_with_expansion(char *str, t_data_val *data)
 {
 	int i;
 	int inc;  
 	char *exit_str; 
+	
 	if (ft_strncmp(str, "$?", 2) == 0 && str[2] == '\0')
 	{
-		exit_str = ft_itoa(g_exit_status);
+		exit_str = ft_itoa(data->last_exit);
 		ft_printf("%s", exit_str);
 		free(exit_str);
 		return;
@@ -77,23 +61,22 @@ void print_with_expansion(char *str, char **envp)
 		inc = 1;
 		
 		if (str[i] == '$' && !char_inside_quotes(str, i))
-			inc = handle_dollar_expansion(str + i, envp);
+			inc = handle_dollar_expansion(str + i, data);
 		else
 			ft_putchar_fd(str[i], 1);
 		i += inc;
 	}
 }
 
-//analise a variavel iniciada com $ dentro da string e imprime seu valor (print_expanded_var)
-int handle_dollar_expansion(char *str, char **envp)
+int  handle_dollar_expansion(char *str, t_data_val *data)
 {
 	int len;
 	char *var_name;
 	char *exit_str; 
 	
-	if (str[1] == '?')  // caso especial para $
+	if (str[1] == '?')  
 	{
-		exit_str = ft_itoa(g_exit_status); // converte código de saída
+		exit_str = ft_itoa(data->last_exit); 
 		ft_printf("%s", exit_str);               
 		free(exit_str);                         
 		return (2);                            
@@ -106,7 +89,7 @@ int handle_dollar_expansion(char *str, char **envp)
 		var_name = ft_substr(str, 1, len);
 		if (!var_name)
 			return (len + 1);
-		print_expanded_var(var_name, envp);
+		print_expanded_var(var_name, data->envp);
 		free(var_name);
 		return (len + 1);
 	}
@@ -114,9 +97,6 @@ int handle_dollar_expansion(char *str, char **envp)
 	return (1);
 }
 
-/*
-Imprimir o valor de uma variável de ambiente passada
-*/
 void print_expanded_var(char *var_name, char **envp)
 {
 	char *value;
@@ -137,17 +117,45 @@ char *remove_all_quotes(const char *token)
 	result = malloc(ft_strlen(token) + 1);
 	if (!result)
 		return (NULL); 
-	// Percorre o token original caractere por caractere
 	while (token[i])
 	{
-		// Se o caractere atual NÃO for uma aspa simples ou dupla
 		if (token[i] != '\'' && token[i] != '"')
-			result[j++] = token[i]; // Copia para a nova string
-		// Se for uma aspa, apenas ignora (não copia)
+			result[j++] = token[i]; 
 		i++;
 	}
 	result[j] = '\0';
 	return result;
 }
 
+int	was_single_quoted(const char *cmdline, const char *token)
+{
+	const char	*p;
+	size_t		len;
 
+	p = cmdline;
+    len = ft_strlen(token);
+	while ((p = ft_strnstr(p, token, ft_strlen(p))))
+	{
+		if (p > cmdline && *(p - 1) == '\''         
+			&& *(p + len) == '\'')                   
+			return (1);
+		p += len;                                 
+	}
+	return (0);
+}
+
+char *get_env_value(char *name, char **envp)
+{
+	int     i;
+	size_t  len;
+
+	len = ft_strlen(name);
+	i = 0;
+	while (envp[i])
+	{
+		if (!ft_strncmp(envp[i], name, len) && envp[i][len] == '=')
+			return (envp[i] + len + 1); 
+		i++;
+	}
+	return (""); 
+}

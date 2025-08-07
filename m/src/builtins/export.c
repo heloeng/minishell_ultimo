@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-//!MINUIR FUNCAO
+
 int	ft_export(char **args, t_data_val *data)
 {
     int i;

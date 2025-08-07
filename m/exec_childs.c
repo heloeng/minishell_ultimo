@@ -12,6 +12,20 @@
 
 #include "minishell.h"
 
+static int is_builtin(char **argv)
+{
+    static char *b[] = {"echo","pwd","env","cd","export","unset","exit",NULL};
+    int i;
+
+    i = 0;
+    while (b[i])
+    {
+        if (strcmp(argv[0], b[i]) == 0)
+            return (1);
+        i++;
+    }
+    return (0);
+}
 void close_unused_fd(t_data_val *data, int i)
 {
     int k;
@@ -27,6 +41,28 @@ void close_unused_fd(t_data_val *data, int i)
     }
 }
 
+// void exec_child_process(t_data_val *data, int i)
+// {
+//     int redir_heredoc;
+
+//     redir_heredoc = check_redir_herdoc(data, i);
+//     if (i == 0)
+//         first_pipe(data, redir_heredoc, i);
+//     else if (i == data->num_pipes) 
+//         last_pipe(data, redir_heredoc, i);
+//     else
+//         middles_pipe(data, redir_heredoc, i);
+//     if (!data->cmd_path)
+//     {
+//         printf("command not found: %s\n", data->parser[i][0]);
+//         exit(127);
+//     }
+//     else
+//         execve(data->cmd_path[i], data->parser[i], data->envp);
+//     perror("execve falhou");
+//     exit(EXIT_FAILURE);
+// }
+
 void exec_child_process(t_data_val *data, int i)
 {
     int redir_heredoc;
@@ -38,13 +74,20 @@ void exec_child_process(t_data_val *data, int i)
         last_pipe(data, redir_heredoc, i);
     else
         middles_pipe(data, redir_heredoc, i);
-    if (!data->cmd_path)
+    if (is_builtin(data->parser[i]))
     {
-        printf("command not found: %s\n", data->parser[i][0]);
-        exit(127);
+        data->token = data->parser[i];     
+        execute_builtin(data);
+        exit(data->last_exit);               
     }
-    else
-        execve(data->cmd_path[i], data->parser[i], data->envp);
+    if (!data->cmd_path[i])                
+    {
+    ft_putstr_fd("minishell: ", 2);
+    ft_putstr_fd(data->parser[i][0], 2);
+    ft_putstr_fd(": command not found\n", 2);
+    exit(127);
+    }
+    execve(data->cmd_path[i], data->parser[i], data->envp);
     perror("execve falhou");
     exit(EXIT_FAILURE);
 }
@@ -72,7 +115,7 @@ void exec_one_command(t_data_val *data, int *status)
             data->token = clear_parser(data->token);
         if (execute_builtin(data))
         {
-            exit(g_exit_status);
+            exit(data->last_exit);
         }
         execve(data->cmd_path[0], data->token, data->envp);
         perror("execve");
@@ -83,3 +126,5 @@ void exec_one_command(t_data_val *data, int *status)
     else
         perror("fork");
 }
+
+

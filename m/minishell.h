@@ -47,6 +47,7 @@ typedef struct s_data_val
     char **cmd_path;
     int num_pipes;
     pid_t *child_pid;
+    int last_exit;
 }   t_data_val;
 
 typedef enum e_redir_heredoc
@@ -58,8 +59,6 @@ typedef enum e_redir_heredoc
     HEREDOC
 }   t_redir_heredoc;
 
-//variavel global
-extern int g_exit_status;
 
 char **duplicate_envp(char **envp);
 
@@ -73,11 +72,13 @@ int ends_with_pipe(const char *input);
 
 //echo utils
 void print_single_quoted(char *token);
-void print_double_quoted(char *token, char **envp);
-void print_with_expansion(char *str, char **envp);
-int  handle_dollar_expansion(char *str, char **envp);
+void print_double_quoted(char *token, t_data_val *data);
+int  handle_dollar_expansion(char *str, t_data_val *data);
+void print_with_expansion(char *str, t_data_val *data);
 void print_expanded_var(char *var_name, char **envp);
 char *remove_all_quotes(const char *token);
+int	was_single_quoted(const char *cmdline, const char *token);
+
 
 //unset utils
 int ft_unset_args(char **args, t_data_val *data);
@@ -114,6 +115,7 @@ int ft_isnumeric(const char *str);
 int	ft_isdigit(int c);
 int ft_isalnum(int c);
 
+char	*ft_strnstr(const char *big, const char *little, size_t len);
 void	ft_putchar_fd(char c, int fd);
 long	ft_atoi_base(const char *nptr, int base);
 char	*ft_itoa(int n);

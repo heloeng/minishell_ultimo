@@ -13,7 +13,6 @@
 #include "minishell.h"
 
 //guarda o status de saída do último comando executado
-int g_exit_status = 0;
 
 
 int validate_pipe_syntax(const char *input)
@@ -54,7 +53,7 @@ int contains_double_pipe(const char *input)
 	{
 		if (input[i] == '|' && input[i + 1] == '|')
 		{
-			if (!char_inside_quotes(input, i)) // ignora se está entre aspas
+			if (!char_inside_quotes(input, i)) 
 			{
 				ft_printf("syntax error near unexpected token `||'\n");
 				return (1);

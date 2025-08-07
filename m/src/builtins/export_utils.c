@@ -13,22 +13,21 @@
 #include "minishell.h"
 
 
-int is_valid_identifier(char *arg)//função garante que o nome da variável siga o padrão do bash:
+int is_valid_identifier(char *arg)
 {
     int i;
 
     i = 0;
     if(!ft_isalpha(arg[0]) && arg[0] != '_')
-        return (0);// inválido se começar com número ou símbolo
+        return (0);
     while(arg[i] && arg[i] != '=')
     {
         if(!ft_isalnum(arg[i]) && arg[i] != '_')
-            return (0);// se tiver caractere inválido (ex: !, -, %, etc), retorna falso
+            return (0);
         i++;
     }
     return (1);
 }
-
 
 void	update_env(char ***envp, char *arg)
 {
@@ -37,20 +36,20 @@ void	update_env(char ***envp, char *arg)
 
 	equal = ft_strchr(arg, '=');
 	if (!equal)
-		return; // Se não tiver '=', não faz nada
+		return; 
 	name = ft_substr(arg, 0, equal - arg);
 	if (!name)
     	return;
 	if (replace_existing_var(*envp, name, arg))
 	{
-		free(name); // libera memória do nome
-		return;     // se substituiu, sai
+		free(name); 
+		return; 
 	}
-	add_new_var(envp, arg);	// Se não substituiu, adiciona uma nova variável
+	add_new_var(envp, arg);	
 	free(name); 
 }
 
-int	replace_existing_var(char **envp, char *name, char *arg)//Verifica se já existe e substitui
+int	replace_existing_var(char **envp, char *name, char *arg)
 {
 	int		i;
 	size_t	len;
@@ -71,10 +70,8 @@ int	replace_existing_var(char **envp, char *name, char *arg)//Verifica se já ex
 		}
 		i++;
 	}
-	return (0); // não encontrou para substituir
+	return (0); 
 }
-
-
 
 void	add_new_var(char ***envp, char *arg)
 {
@@ -102,5 +99,6 @@ void	add_new_var(char ***envp, char *arg)
 	free(*envp);
 	*envp = new_env;
 }
+
 
 

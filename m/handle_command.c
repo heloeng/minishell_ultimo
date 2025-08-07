@@ -48,8 +48,36 @@ void close_fds(int **fd, int i)
     }
 }
 
+// void exec_pipes(t_data_val *data, int i, int *status)
+// {
+//     while (i <= data->num_pipes)
+//     {
+//         data->child_pid[i] = fork();
+//         if (data->child_pid[i] < 0)
+//             printf("ERROR ON CREATING CHILD PROCESS!\n");
+//         else if (data->child_pid[i] == 0)
+//             exec_child_process(data, i);
+//         i++;
+//     }
+//     i = 0;
+//     while (data->fd[i] && i <= data->num_pipes)
+//     {
+//         close(data->fd[i][0]);
+//         close(data->fd[i][1]);
+//         i++;
+//     }
+//     i = 0;
+//     while (data->child_pid[i] && i <= data->num_pipes)
+//     {
+//         waitpid(data->child_pid[i], status, 0);
+//         i++;
+//     }
+// }
+
 void exec_pipes(t_data_val *data, int i, int *status)
 {
+    int status_last;
+
     while (i <= data->num_pipes)
     {
         data->child_pid[i] = fork();
@@ -66,12 +94,15 @@ void exec_pipes(t_data_val *data, int i, int *status)
         close(data->fd[i][1]);
         i++;
     }
-    i = 0;
-    while (data->child_pid[i] && i <= data->num_pipes)
-    {
-        waitpid(data->child_pid[i], status, 0);
-        i++;
-    }
+    waitpid(data->child_pid[data->num_pipes],                     
+            &status_last, 0);                                    
+    i = 0;                                                      
+    while (i < data->num_pipes)                                  
+    {                                                             
+        waitpid(data->child_pid[i], NULL, 0);                   
+        i++;                                                     
+    }                                                                       
+    *status = status_last;                                        
 }
 
 void exc_command(t_data_val *data)
@@ -91,5 +122,6 @@ void exc_command(t_data_val *data)
     }
     else
         exec_one_command(data, &status);
+    data->last_exit = WIFEXITED(status) ? WEXITSTATUS(status) : 1;
     free_parser(data);         
 }

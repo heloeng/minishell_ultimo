@@ -98,6 +98,7 @@ void init_data(t_data_val **data, char **envp)
     (*data)->envp_path = get_envp_path(envp);
     (*data)->num_pipes = 0;
     (*data)->cmd_path = NULL;
+    (*data)->last_exit = 0;
 }
 
 int main(int argc, char **argv, char **envp)

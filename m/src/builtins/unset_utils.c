@@ -1,29 +1,19 @@
 
 #include "minishell.h"
 
-/*
-args	char **	O vetor de argumentos do usuário (ex: unset VAR1 VAR2)
-data	t_data_val * Struct principal, que contém o envp atual
-unset HELLO HOME PATH
-args[0] = "unset"
-args[1] = "HELLO"
-args[2] = "HOME"
-args[3] = "PATH"
-args[4] = NULL
-*/
+
 int ft_unset_args(char **args, t_data_val *data)
 {
 	int i = 1;
 
-	while (args[i]) // enquanto tiver variáveis após "unset"
+	while (args[i]) 
 	{
-		ft_unset(&data->envp, args[i]); // remove cada uma
+		ft_unset(&data->envp, args[i]); 
 		i++;
 	}
-	return (0); // sucesso (exit code 0)
+	return (0); 
 }
 
-// cria um novo envp sem a variável name.
 char **build_new_env(char **old, const char *name)
 {
 	char **new;
@@ -36,7 +26,7 @@ char **build_new_env(char **old, const char *name)
 	len = ft_strlen(name);
 	while (old[i])
 		i++;
-	new = malloc(sizeof(char *) * (i + 1)); // +1 pro NULL final
+	new = malloc(sizeof(char *) * (i + 1)); 
 	if (!new)
 		return NULL;
 	i = 0;

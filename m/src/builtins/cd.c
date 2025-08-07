@@ -23,20 +23,16 @@ int run_cd(char *path)
         perror("cd");
         return 1;
     }
-
     if (chdir(path) == -1)             
     {
         perror("cd");                   
         free(oldpwd);
         return 1;
     }
-
-    //atualiza OLDPWD e PWD 
     setenv("OLDPWD", oldpwd, 1);
     free(oldpwd);
 
     if (getcwd(cwd, sizeof(cwd)))
         setenv("PWD", cwd, 1);
-
     return 0;                            
 }
