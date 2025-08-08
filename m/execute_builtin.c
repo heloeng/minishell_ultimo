@@ -62,17 +62,21 @@ void ft_env(t_data_val *data)
 {
     int i;
 
-    if(data->token[1])
+    if (data->token[1])
     {
-        ft_printf("env: %s: No such file or directory\n", data->token[1]);
-        return ;
+        ft_putstr_fd("env: ", 2);
+        ft_putstr_fd(data->token[1], 2);
+        ft_putstr_fd(": No such file or directory\n", 2);
+        data->last_exit = 127;         
+        return;
     }
     i = 0;
-    while(data->envp[i])
+    while (data->envp[i])
     {
         ft_printf("%s\n", data->envp[i]);
         i++;
     }
+    data->last_exit = 0;             
 }
 
 
