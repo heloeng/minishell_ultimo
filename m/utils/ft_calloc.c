@@ -1,13 +1,12 @@
- 
- /* ************************************************************************** */
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   ft_calloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: helde-so <helde-so@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dydaniel <dydaniel@student.42sp.org.b      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/24 10:35:21 by helde-so          #+#    #+#             */
-/*   Updated: 2024/11/07 17:46:43 by helde-so         ###   ########.fr       */
+/*   Created: 2025/08/05 22:49:41 by dydaniel          #+#    #+#             */
+/*   Updated: 2025/08/05 22:50:31 by dydaniel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +19,7 @@ void	*ft_calloc(size_t nmemb, size_t size)
 
 	if (nmemb == 0 || size == 0)
 		return (malloc(1));
-	if (nmemb > ((size_t)-1) / size)
+	if (nmemb > ((size_t) - 1) / size)
 		return (NULL);
 	total = size * nmemb;
 	ptr = malloc(total);

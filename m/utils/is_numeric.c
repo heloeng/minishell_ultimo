@@ -1,26 +1,48 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   is_numeric.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dydaniel <dydaniel@student.42sp.org.b      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/05 22:47:26 by dydaniel          #+#    #+#             */
+/*   Updated: 2025/08/05 22:48:29 by dydaniel         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "minishell.h"
-
-/*Retorna 1 se a string for só composta por dígitos ("42", "0", "123456")
-Retorna 0 se tiver qualquer caractere não numérico ("abc", "42a", "")
-*/
 
 int	ft_isnumeric(const char *str)
 {
 	int	i;
 
-	if (!str || !*str)
+	if (str[0] == '\0')
+	{
 		return (0);
+	}
 	i = 0;
-	if (str[i] == '+' || str[i] == '-')  
-		i++;
-	if (!ft_isdigit(str[i]))             
-		return (0);
 	while (str[i])
 	{
-		if (!ft_isdigit(str[i]))
+		if (!ft_isdigit((unsigned char)str[i]))
 			return (0);
 		i++;
 	}
 	return (1);
 }
+
+int ft_isnumeric_with_sign(const char *s)
+{
+    int i;
+
+    i = 0;
+    if (!s || !*s) return 0;
+    if (s[i] == '+' || s[i] == '-') i++;   
+    if (!s[i]) return 0;                  
+    while (s[i]) {
+        if (!ft_isdigit((unsigned char)s[i])) return 0;
+        i++;
+    }
+    return 1;
+}
+
+

@@ -6,7 +6,7 @@
 /*   By: helde-so <helde-so@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 14:28:36 by helde-so          #+#    #+#             */
-/*   Updated: 2025/06/30 15:48:06 by helde-so         ###   ########.fr       */
+/*   Updated: 2025/08/05 22:46:46 by dydaniel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	ft_putstr_fd(const char *s, int fd)
 {
-	const char *ptr = s;
+	const char	*ptr = s;
 
 	ptr = s;
 	while (*ptr != '\0')

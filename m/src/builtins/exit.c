@@ -13,7 +13,7 @@ int ft_exit(t_data_val *data)
 	}
 	if (data->token[1])
 	{
-		if (!ft_isnumeric(data->token[1]))
+		if (!ft_isnumeric_with_sign(data->token[1]))
 		{
 			ft_putstr_fd("exit: ", 2);
 			ft_putstr_fd(data->token[1], 2);

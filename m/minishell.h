@@ -59,6 +59,8 @@ typedef enum e_redir_heredoc
     HEREDOC
 }   t_redir_heredoc;
 
+//variavel global
+//extern int g_exit_status;
 
 char **duplicate_envp(char **envp);
 
@@ -116,6 +118,7 @@ int	ft_isdigit(int c);
 int ft_isalnum(int c);
 
 char	*ft_strnstr(const char *big, const char *little, size_t len);
+int ft_isnumeric_with_sign(const char *s);
 void	ft_putchar_fd(char c, int fd);
 long	ft_atoi_base(const char *nptr, int base);
 char	*ft_itoa(int n);
@@ -129,6 +132,7 @@ size_t	ft_strlcpy(char *dest, const char *src, size_t size);
 size_t ft_strcpy_quote(char *dest, const char *src, size_t size);
 size_t	ft_strlcat(char *dst, const char *src, size_t size);
 int	ft_strncmp(const char *s1, const char *s2, size_t n);
+int	ft_strcmp(const char *s1, const char *s2);
 char	*ft_strdup(const char *s);
 int ft_isspace(char c);
 void    configure_signal();
@@ -157,6 +161,9 @@ void close_unused_fd(t_data_val *data, int i);
 void first_pipe(t_data_val *data, int flag, int i);
 void middles_pipe(t_data_val *data, int flag, int i);
 void last_pipe(t_data_val *data, int flag, int i);
+void free_data(t_data_val *data);
+void	free_fd(int ***fd);
+void free_after_command(t_data_val *data);
 //remove
 void print_tokens(char **token);
 void parse_token(t_data_val **data);

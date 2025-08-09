@@ -62,6 +62,7 @@ void recive_inputs(t_data_val *data)
         if (data->text == NULL)
         {
             write(STDOUT_FILENO, "exit\n", 5);
+            free_data(data);
             break;
         }
         data->text = complete_unclosed_quote(data->text);
@@ -70,17 +71,16 @@ void recive_inputs(t_data_val *data)
             free(data->text);
             continue;
         }
-        
         if (data->text != NULL &&  num_tokens(data->text) > 0)
             add_history(data->text);
         if (strcmp(data->text, "exit") == 0)  
         {
             rl_clear_history();
-            free(data->text);
+            free_data(data);
             break;       
         }
         handle_command(data);
-        free(data->text);
+        free_data(data);
     }
 }
 
@@ -88,16 +88,16 @@ void recive_inputs(t_data_val *data)
 //o resto do programa
 void init_data(t_data_val **data, char **envp)
 {
-    // (*data)->envp = envp;
     (*data)->envp = duplicate_envp(envp);
     (*data)->fd = NULL;
     (*data)->text = NULL;
     (*data)->token = NULL;
-    (*data)->child_pid = 0;
     (*data)->parser = NULL;
+    (*data)->path = NULL;
     (*data)->envp_path = get_envp_path(envp);
-    (*data)->num_pipes = 0;
     (*data)->cmd_path = NULL;
+    (*data)->child_pid = NULL;
+    (*data)->num_pipes = 0;
     (*data)->last_exit = 0;
 }
 
@@ -113,5 +113,6 @@ int main(int argc, char **argv, char **envp)
     init_data(&data, envp);//inicia a estrutura  
     configure_signal();
     recive_inputs(data);
+    free(data);
     return (0); 
 }

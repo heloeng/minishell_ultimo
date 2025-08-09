@@ -6,20 +6,17 @@
 /*   By: helde-so <helde-so@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 17:45:21 by helde-so          #+#    #+#             */
-/*   Updated: 2025/07/15 17:45:23 by helde-so         ###   ########.fr       */
+/*   Updated: 2025/08/05 22:55:41 by dydaniel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/*
-Verifica se existe alguma aspa (simples ou dupla) sem o par de fechamento.
-*/
-int has_unclosed_quote(char *str) 
+int	has_unclosed_quote(char *str)
 {
-	char quote;
-	
-    quote = '\0';
+	char	quote;
+
+	quote = '\0';
 	while (*str)
 	{
 		if (*str == '\'' || *str == '"')
@@ -34,19 +31,16 @@ int has_unclosed_quote(char *str)
 	return (quote != '\0');
 }
 
-/*
-Continua lendo o input do usuário (com readline("> ")) até que todas as aspas abertas sejam fechadas.
-*/
-char *complete_unclosed_quote(char *text) 
+char	*complete_unclosed_quote(char *text)
 {
-	char *temp;
-	char *joined;
+	char	*temp;
+	char	*joined;
 
 	while (has_unclosed_quote(text))
 	{
 		temp = readline("> ");
 		if (!temp)
-			break;
+			break ;
 		joined = ft_strjoin(text, "\n");
 		free(text);
 		text = ft_strjoin(joined, temp);
@@ -56,27 +50,22 @@ char *complete_unclosed_quote(char *text)
 	return (text);
 }
 
-
-/*
-ignorar  | , ||,  $ que esteja entre aspas.
-caractere entre aspas será tratado como literal mprime como texto normal
-Não executa
- Não faz parsing  (como redirecionamento, pipe, expansão etc.)
-*/
-//caracter esta entre aspas
-int char_inside_quotes(const char *str, int index)
+int	char_inside_quotes(const char *str, int index)
 {
-	int i;
-	int single_quote = 0;
-	int double_quote = 0;
+	int	i;
+	int	single_quote;
+	int	double_quote;
 
 	i = 0;
-	while(i < index && str[i])
+	single_quote = 0;
+	double_quote = 0;
+	while (i < index && str[i])
 	{
-		if(str[i] == '\'' && !double_quote)
+		if (str[i] == '\'' && !double_quote)
 		{
 			single_quote = !single_quote;
-		}else if (str[i] == '"' && !single_quote)
+		}
+		else if (str[i] == '"' && !single_quote)
 		{
 			double_quote = !single_quote;
 		}

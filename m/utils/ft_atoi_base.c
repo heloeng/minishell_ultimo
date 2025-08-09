@@ -6,11 +6,11 @@
 /*   By: dydaniel <dydaniel@student.42sp.org.b      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 15:35:31 by dydaniel          #+#    #+#             */
-/*   Updated: 2025/03/19 23:11:56 by dydaniel         ###   ########.fr       */
+/*   Updated: 2025/08/05 22:48:50 by dydaniel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
- #include "minishell.h"
+#include "minishell.h"
 
 int	ft_valid_char(char c, int base)
 {

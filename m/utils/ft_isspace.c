@@ -6,15 +6,15 @@
 /*   By: dydaniel <dydaniel@student.42sp.org.b      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 20:49:54 by dydaniel          #+#    #+#             */
-/*   Updated: 2025/06/16 20:49:56 by dydaniel         ###   ########.fr       */
+/*   Updated: 2025/08/05 23:04:21 by dydaniel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int ft_isspace(char c)
+int	ft_isspace(char c)
 {
-    if (c == '\r' || c == '\t' || c == '\f' ||
-        c == '\n' || c == ' '  || c == '\v')
-        return (1);
-    else
-        return (0);
+	if (c == '\r' || c == '\t' || c == '\f' || c == '\n' || \
+				c == ' ' || c == '\v')
+		return (1);
+	else
+		return (0);
 }

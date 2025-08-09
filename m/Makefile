@@ -40,7 +40,6 @@ SOURCES = \
 	  $(DIR_UTILS)/ft_bzero.c\
 	  $(DIR_UTILS)/ft_memset.c\
 	  $(DIR_UTILS)/ft_strnstr.c\
-	  $(DIR_UTILS)/ft_strcmp.c \
 	  $(BUILDINS_DIR)/echo.c \
 	  $(BUILDINS_DIR)/echo_utils.c \
 	  $(BUILDINS_DIR)/unset.c \
@@ -56,7 +55,7 @@ SOURCES = \
 	  exec_pipes.c solo_redir_heredoc.c\
 	  execute_builtin.c parser_clear.c heredoc.c\
 	  validate_inputs.c\
-	  duplicate_envp.c
+	  duplicate_envp.c free_data.c
 
 
 OBJECTS = $(SOURCES:.c=.o)

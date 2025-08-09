@@ -6,11 +6,11 @@
 /*   By: dydaniel <dydaniel@student.42sp.org.b      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 14:39:01 by dydaniel          #+#    #+#             */
-/*   Updated: 2024/10/11 14:43:15 by dydaniel         ###   ########.fr       */
+/*   Updated: 2025/08/05 22:49:09 by dydaniel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
- #include "minishell.h"
+#include "minishell.h"
 
 size_t	ft_strlen(const char *s)
 {

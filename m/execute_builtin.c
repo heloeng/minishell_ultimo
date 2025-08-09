@@ -50,14 +50,14 @@ int execute_builtin(t_data_val *data)
         return (1); 
     }
     if (ft_strncmp(data->token[0], "export", 6) == 0)
+    {
 		data->last_exit = ft_export(data->token, data);
         return (1);
-    return (0);// não é builtin
+    }
+    return (0);
     
 }
 
-
-// há outro erro de permissão denied
 void ft_env(t_data_val *data)
 {
     int i;

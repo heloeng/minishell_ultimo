@@ -6,11 +6,11 @@
 /*   By: dydaniel <dydaniel@student.42sp.org.b      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 16:11:57 by dydaniel          #+#    #+#             */
-/*   Updated: 2024/10/21 11:57:35 by dydaniel         ###   ########.fr       */
+/*   Updated: 2025/08/05 22:50:52 by dydaniel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
- #include "minishell.h"
+#include "minishell.h"
 
 int	ft_lenstr(const char *str)
 {
