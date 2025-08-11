@@ -42,31 +42,6 @@ void	close_unused_fd(t_data_val *data, int i)
 	}
 }
 
-/*função antiga
-void	exec_child_process(t_data_val *data, int i)
-{
-	int	redir_heredoc;
-
-	redir_heredoc = check_redir_herdoc(data, i);
-	if (i == 0)
-		first_pipe(data, redir_heredoc, i);
-	else if (i == data->num_pipes)
-		last_pipe(data, redir_heredoc, i);
-	else
-		middles_pipe(data, redir_heredoc, i);
-	if (!data->cmd_path)
-	{
-		printf("command not found: %s\n", data->parser[i][0]);
-		exit(127);
-	}
-	else
-		execve(data->cmd_path[i], data->parser[i], data->envp);
-	perror("execve falhou");
-	free_data(data);
-	exit(EXIT_FAILURE);
-}
-*/
-
 void exec_child_process(t_data_val *data, int i)
 {
     int redir_heredoc;
@@ -121,6 +96,14 @@ void	exec_one_command(t_data_val *data, int *status)
 		}
 		if (flag != NO_RD_HD)
 			data->token = clear_parser(data->token);
+		if (!data->cmd_path[0])
+		{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(data->token[0], 2);
+		ft_putstr_fd(": command not found\n", 2);
+		free_data(data);
+		exit(127);
+        }
 		execve(data->cmd_path[0], data->token, data->envp);
 		perror("execve");
 		free_data(data);

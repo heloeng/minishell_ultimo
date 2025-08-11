@@ -12,7 +12,6 @@
 
 #include "minishell.h"
 
-
 int is_valid_identifier(char *arg)
 {
     int i;

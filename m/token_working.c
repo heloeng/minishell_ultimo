@@ -141,7 +141,8 @@ void	token_n_copy(char *token_i, int size, char **text)
 			while (**text != c)
 			{
 				if (**text == '\\' && (*(*text + 1) == '\'' || \
-							*(*text) + 1 == '"'))
+							//*(*text) + 1 == '"'))
+							*(*text + 1) == '"'))//ALTEREI AQUI
 					(*text)++;
 				token_i[k] = (**text);
 				k++;

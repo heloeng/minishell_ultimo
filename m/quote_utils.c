@@ -67,7 +67,7 @@ int	char_inside_quotes(const char *str, int index)
 		}
 		else if (str[i] == '"' && !single_quote)
 		{
-			double_quote = !single_quote;
+			double_quote = !double_quote;
 		}
 		i++;
 	}

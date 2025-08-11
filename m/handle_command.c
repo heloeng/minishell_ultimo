@@ -12,25 +12,6 @@
 
 #include "minishell.h"
 
-// void	handle_command(t_data_val *data)
-// {
-// 	divide_arguments(&data->token, data->text);
-// 	/*if (execute_builtin(data))
-// 	* {
-// 	* free_tokens(&data->token);
-// 	* free(data->fd);
-// 	* return;
-// 	* }*/
-//     if (!ft_strchr(data->text, '|') && execute_builtin(data))
-//     {
-//         free_tokens(&data->token);
-//         free(data->fd);
-//         return;
-//     }
-//     exc_command(data);
-//     free_tokens(&data->token);
-//     free(data->fd);
-// }
 
 void	handle_command(t_data_val *data)
 {
@@ -58,7 +39,6 @@ void free_after_command(t_data_val *data)
 		data->token = NULL;
 	}
     if (data->parser)
-
 		free_parser(data);
     if (data->cmd_path)
 	{ 

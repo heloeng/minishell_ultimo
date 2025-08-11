@@ -59,6 +59,13 @@ typedef enum e_redir_heredoc
     HEREDOC
 }   t_redir_heredoc;
 
+typedef enum e_qtype
+{
+	Q_NONE = 0,
+	Q_SINGLE,
+	Q_DOUBLE
+}	t_qtype;
+
 //variavel global
 //extern int g_exit_status;
 
@@ -80,7 +87,7 @@ void print_with_expansion(char *str, t_data_val *data);
 void print_expanded_var(char *var_name, char **envp);
 char *remove_all_quotes(const char *token);
 int	was_single_quoted(const char *cmdline, const char *token);
-
+int was_double_quoted(const char *cmdline, const char *token);
 
 //unset utils
 int ft_unset_args(char **args, t_data_val *data);

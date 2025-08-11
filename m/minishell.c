@@ -69,6 +69,7 @@ void recive_inputs(t_data_val *data)
         if (validate_pipe_syntax(data->text))
         {
             free(data->text);
+            data->text = NULL; 
             continue;
         }
         if (data->text != NULL &&  num_tokens(data->text) > 0)
@@ -80,7 +81,8 @@ void recive_inputs(t_data_val *data)
             break;       
         }
         handle_command(data);
-        free_data(data);
+        free(data->text);
+        data->text = NULL;
     }
 }
 

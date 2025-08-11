@@ -14,9 +14,10 @@
 
 int execute_builtin(t_data_val *data) 
 {
-    char **args = data->token;
+    char **args;
     int i;
-
+    
+    args = data->token;
     i = 0;
     while (args[i] && ft_strchr(args[i], '='))
         i++;
