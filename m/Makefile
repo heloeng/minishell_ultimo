@@ -46,8 +46,8 @@ SOURCES = \
 	  $(BUILDINS_DIR)/export.c \
 	  $(BUILDINS_DIR)/export_utils.c \
 	  $(BUILDINS_DIR)/cd.c \
-	  $(BUILDINS_DIR)/cd_utils.c \
 	  $(BUILDINS_DIR)/env.c \
+	  $(BUILDINS_DIR)/cd_utils.c \
 	  $(BUILDINS_DIR)/exit.c \
 	  $(BUILDINS_DIR)/pwd.c \
 	  minishell.c token_working.c token_aux.c handle_command.c redir_heredoc.c\
