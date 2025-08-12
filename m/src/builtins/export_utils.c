@@ -12,6 +12,7 @@
 
 #include "minishell.h"
 
+
 int is_valid_identifier(char *arg)
 {
     int i;
@@ -98,6 +99,5 @@ void	add_new_var(char ***envp, char *arg)
 	free(*envp);
 	*envp = new_env;
 }
-
 
 

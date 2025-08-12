@@ -29,11 +29,7 @@ char	*check_path(t_data_val *data, char *cmd)
 	}
 	i = 0;
 	path_env = getenv("PATH");
-	if (!path_env || !*path_env)       
-    return (NULL);
 	splitted_path = ft_split(path_env, ':');
-	if (!splitted_path)                 
-    return (NULL);
 	while (splitted_path[i])
 	{
 		aux = ft_strjoin(splitted_path[i], "/");
@@ -58,6 +54,7 @@ void	get_full_path(t_data_val **data)
 	i = 0;
 	if ((*data)->parser)
 	{
+
 		(*data)->cmd_path = \
 			malloc(sizeof(char *) * ((*data)->num_pipes + 2));
 		while (i <= (*data)->num_pipes)

@@ -12,76 +12,138 @@
 
 #include "minishell.h"
 
+void print_single_quoted(char *token)
+{
+	char *trimmed;
+	int len;
+
+	len = ft_strlen(token);
+	trimmed = malloc(sizeof(char) * (len - 2 + 1));
+	if (!trimmed)
+		return;
+	ft_strlcpy(trimmed, token + 1, len - 1);
+	ft_printf("%s", trimmed);
+	free(trimmed);
+}
+
+void print_double_quoted(char *token, t_data_val *data)
+{
+	char *trimmed;
+	int len;
+
+	len = ft_strlen(token);
+	trimmed = malloc(sizeof(char) * (len - 2 + 1));
+	if (!trimmed)
+		return;
+	ft_strlcpy(trimmed, token + 1, len - 1);
+	print_with_expansion(trimmed, data);
+	free(trimmed);
+}
 
 void print_with_expansion(char *str, t_data_val *data)
 {
-    int i;
-    
-    if (ft_strncmp(str, "$?", 2) == 0 && str[2] == '\0')
-    {
-        char *exit_str = ft_itoa(data->last_exit);
-        ft_printf("%s", exit_str);
-        free(exit_str);
-        return;
-    }
+	int i;
+	int inc;  
+	char *exit_str; 
+	
+	if (ft_strncmp(str, "$?", 2) == 0 && str[2] == '\0')
+	{
+		exit_str = ft_itoa(data->last_exit);
+		ft_printf("%s", exit_str);
+		free(exit_str);
+		return;
+	}
 
 	i = 0;
-    while (str[i])
-    {
-        if (str[i] == '\\' && str[i + 1] == '$')
-        {
-            ft_putchar_fd('$', 1);
-            i += 2;
-            continue;
-        }
-        if (str[i] == '$')
-        {
-            int consumed = handle_dollar_expansion(str + i, data);
-            if (consumed <= 0) consumed = 1;  
-            i += consumed;
-            continue;
-        }
-        ft_putchar_fd(str[i], 1);
-        i++;
-    }
+	while (str[i])
+	{
+		inc = 1;
+		
+		if (str[i] == '$' && !char_inside_quotes(str, i))
+			inc = handle_dollar_expansion(str + i, data);
+		else
+			ft_putchar_fd(str[i], 1);
+		i += inc;
+	}
 }
 
-int handle_dollar_expansion(char *str, t_data_val *data)
+int  handle_dollar_expansion(char *str, t_data_val *data)
 {
-    int len;
-
-    if (str[1] == '?')
-    {
-        char *exit_str = ft_itoa(data->last_exit);
-        ft_printf("%s", exit_str);
-        free(exit_str);
-        return 2;
-    }
-    len = 0;
-    while (str[1 + len] && (ft_isalnum((unsigned char)str[1 + len]) || str[1 + len] == '_'))
-    {
-        if (len >= 255) break;
-        len++;
-    }
-
-    if (len > 0)
-    {
-        char name[256];
-        int j;
-        for (j = 0; j < len && j < 255; j++)
-            name[j] = str[1 + j];
-        name[j] = '\0';
-        char *val = get_env_value(name, data->envp);
-        ft_printf("%s", val);
-
-        return len + 1; 
-    }
-    ft_putchar_fd('$', 1);
-    return 1;
+	int len;
+	char *var_name;
+	char *exit_str; 
+	
+	if (str[1] == '?')  
+	{
+		exit_str = ft_itoa(data->last_exit); 
+		ft_printf("%s", exit_str);               
+		free(exit_str);                         
+		return (2);                            
+	}
+	len = 0;
+	while (str[1 + len] && (ft_isalnum(str[1 + len]) || str[1 + len] == '_'))
+		len++;
+	if (len > 0)
+	{
+		var_name = ft_substr(str, 1, len);
+		if (!var_name)
+			return (len + 1);
+		print_expanded_var(var_name, data->envp);
+		free(var_name);
+		return (len + 1);
+	}
+	ft_putchar_fd('$', 1);
+	return (1);
 }
 
+void print_expanded_var(char *var_name, char **envp)
+{
+	char *value;
 
-char *get_env_value(char *name, char **envp)
+	value = get_env_value(var_name, envp);
+	ft_printf("%s", value);
+}
+
+char *remove_all_quotes(const char *token)
+{
+	int i;
+	int j;
+	char *result;
+
+	i = 0,
+	j = 0;
+	
+	result = malloc(ft_strlen(token) + 1);
+	if (!result)
+		return (NULL); 
+	while (token[i])
+	{
+		if (token[i] != '\'' && token[i] != '"')
+			result[j++] = token[i]; 
+		i++;
+	}
+	result[j] = '\0';
+	return result;
+}
+
+int	was_single_quoted(const char *cmdline, const char *token)
+{
+	const char	*p;
+	size_t		len;
+
+	p = cmdline;
+    len = ft_strlen(token);
+	while ((p = ft_strnstr(p, token, ft_strlen(p))))
+	{
+		if (p > cmdline && *(p - 1) == '\''         
+			&& *(p + len) == '\'')                   
+			return (1);
+		p += len;                                 
+	}
+	return (0);
+}
+
+/*char *get_env_value(char *name, char **envp)
 {
 	int     i;
 	size_t  len;
@@ -95,4 +157,5 @@ char *get_env_value(char *name, char **envp)
 		i++;
 	}
 	return (""); 
-}
+}*/
+

@@ -12,6 +12,10 @@
 
 #include "minishell.h"
 
+//guarda o status de saída do último comando executado
+int g_exit_status = 0;
+
+
 int validate_pipe_syntax(const char *input)
 {
 	if (starts_with_pipe(input))

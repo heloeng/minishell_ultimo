@@ -1,12 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   duplicate_envp.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dydaniel <dydaniel@student.42sp.org.b      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/11 21:29:59 by dydaniel          #+#    #+#             */
+/*   Updated: 2025/08/11 21:30:02 by dydaniel         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-/*
-Cria uma cópia independente do array envp (passadas no main()), 
-para que o (minishell) modifique com segurança.
-O envp original recebido no main() foi criado pelo sistema operacional, 
-e não pode fazer free(), realloc() ou strdup() , pois da erros como:
-invalid pointer, munmap_chunk() , core dumped
-*/
 char **duplicate_envp(char **envp)
 {
 	int count = 0;

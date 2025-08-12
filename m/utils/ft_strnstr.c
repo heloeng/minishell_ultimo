@@ -6,11 +6,11 @@
 /*   By: helde-so <helde-so@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 13:46:01 by helde-so          #+#    #+#             */
-/*   Updated: 2024/11/07 18:39:23 by helde-so         ###   ########.fr       */
+/*   Updated: 2025/08/11 22:18:10 by dydaniel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
- #include "minishell.h"
+#include "minishell.h"
 
 char	*ft_strnstr(const char *big, const char *little, size_t len)
 {

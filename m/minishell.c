@@ -43,17 +43,6 @@ char *get_envp_path(char **envp)
 }
 
 
-int a_comma(char *c, char c_text)
-{
-    if (c_text == '"' || c_text == '\'')
-    {
-        *c = c_text;
-        return (1);
-    }
-    else
-        return (0);
-}
-
 void recive_inputs(t_data_val *data)
 {
     while (1) 
@@ -69,7 +58,6 @@ void recive_inputs(t_data_val *data)
         if (validate_pipe_syntax(data->text))
         {
             free(data->text);
-            data->text = NULL; 
             continue;
         }
         if (data->text != NULL &&  num_tokens(data->text) > 0)
@@ -81,8 +69,6 @@ void recive_inputs(t_data_val *data)
             break;       
         }
         handle_command(data);
-        free(data->text);
-        data->text = NULL;
     }
 }
 
@@ -115,6 +101,8 @@ int main(int argc, char **argv, char **envp)
     init_data(&data, envp);//inicia a estrutura  
     configure_signal();
     recive_inputs(data);
+    if (data->envp)
+		free_tokens(&data->envp);
     free(data);
     return (0); 
 }

@@ -34,6 +34,7 @@ SOURCES = \
 	  $(DIR_UTILS)/ft_substr.c\
 	  $(DIR_UTILS)/ft_isalnum.c\
 	  $(DIR_UTILS)/ft_putchar_fd.c\
+	  $(DIR_UTILS)/quote_utils.c\
 	  $(DIR_UTILS)/ft_itoa.c\
 	  $(DIR_UTILS)/ft_calloc.c\
 	  $(DIR_UTILS)/ft_bzero.c\
@@ -42,16 +43,15 @@ SOURCES = \
 	  $(BUILDINS_DIR)/echo.c \
 	  $(BUILDINS_DIR)/echo_utils.c \
 	  $(BUILDINS_DIR)/unset.c \
-	  $(BUILDINS_DIR)/unset_utils.c \
 	  $(BUILDINS_DIR)/export.c \
 	  $(BUILDINS_DIR)/export_utils.c \
 	  $(BUILDINS_DIR)/cd.c \
 	  $(BUILDINS_DIR)/cd_utils.c \
 	  $(BUILDINS_DIR)/exit.c \
 	  $(BUILDINS_DIR)/pwd.c \
-	  minishell.c token_working.c handle_command.c redir_heredoc.c\
+	  minishell.c token_working.c token_aux.c handle_command.c redir_heredoc.c\
 	  configure_signals.c pipes_parser.c get_path.c exec_childs.c\
-	  exec_pipes.c solo_redir_heredoc.c quote_utils.c\
+	  exec_pipes.c solo_redir_heredoc.c\
 	  execute_builtin.c parser_clear.c heredoc.c\
 	  validate_inputs.c\
 	  duplicate_envp.c free_data.c

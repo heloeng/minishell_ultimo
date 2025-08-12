@@ -52,8 +52,6 @@ void	free_data_aux(t_data_val *data)
 
 void	free_data(t_data_val *data)
 {
-	if (data->envp)
-		free_tokens(&data->envp);
 	if (data->text)
 		free(data->text);
 	if (data->token)
@@ -63,4 +61,35 @@ void	free_data(t_data_val *data)
 	free_data_aux(data);
 	if (data->fd)
 		free_fd(&data->fd);
+}
+
+void	free_tokens(char ***token)
+{
+	int	i;
+
+	i = 0;
+	while ((*token)[i])
+	{
+		free((*token)[i]);
+		i++;
+	}
+	free(*token);
+	(*token) = NULL;
+}
+
+void	free_parser(t_data_val *data)
+{
+	int	i;
+
+	i = 0;
+	while (data->parser && data->parser[i])
+	{
+		free_tokens(&data->parser[i]);
+		i++;
+	}
+	if (data->parser)
+	{
+		free(data->parser);
+		data->parser = NULL;
+	}
 }

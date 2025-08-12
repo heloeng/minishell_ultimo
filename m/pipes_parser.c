@@ -97,20 +97,3 @@ void	parse_token(t_data_val **data)
 	else
 		return ;
 }
-
-void	free_parser(t_data_val *data)
-{
-	int	i;
-
-	i = 0;
-	while (data->parser && data->parser[i])
-	{
-		free_tokens(&data->parser[i]);
-		i++;
-	}
-	if (data->parser)
-	{
-		free(data->parser);
-		data->parser = NULL;
-	}
-}

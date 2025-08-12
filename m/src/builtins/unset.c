@@ -12,6 +12,32 @@
 
 #include "minishell.h"
 
+char **build_new_env(char **old, const char *name)
+{
+	char **new;
+	int i;
+	int j;
+	int len;
+
+	i = 0;
+	j = 0;
+	len = ft_strlen(name);
+	while (old[i])
+		i++;
+	new = malloc(sizeof(char *) * (i + 1)); 
+	if (!new)
+		return NULL;
+	i = 0;
+	while(old[i])
+	{
+		if(!(ft_strncmp(old[i], name, len) == 0 && old[i][len] == '='))
+			new[j++] = ft_strdup(old[i]);
+		i++;
+	}
+	new[j] = NULL;
+	return new;
+}
+
 void ft_unset(char ***envp, char *name)
 {
 	char **old;
@@ -19,7 +45,6 @@ void ft_unset(char ***envp, char *name)
 
 	if (!envp || !*envp || !name)
 		return;
-
 	old = *envp;
 	new = build_new_env(old, name);
 	if (!new)
@@ -28,3 +53,14 @@ void ft_unset(char ***envp, char *name)
 	*envp = new;
 }
 
+int ft_unset_args(char **parser_i, t_data_val *data)
+{
+	int i = 1;
+
+	while (parser_i[i]) 
+	{
+		ft_unset(&data->envp, parser_i[i]); 
+		i++;
+	}
+	return (0); 
+}

@@ -21,18 +21,18 @@ int run_cd(char *path)
     if (!oldpwd)                       
     {
         perror("cd");
-        return 1;
+        return (1);
     }
     if (chdir(path) == -1)             
     {
         perror("cd");                   
         free(oldpwd);
-        return 1;
+        return (1);
     }
-    setenv("OLDPWD", oldpwd, 1);
+    setenv("OLDPWD", oldpwd, 1);//Não é função autorizada
     free(oldpwd);
 
     if (getcwd(cwd, sizeof(cwd)))
-        setenv("PWD", cwd, 1);
-    return 0;                            
+        setenv("PWD", cwd, 1);//Não é função autorizada
+    return (0);                            
 }

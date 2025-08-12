@@ -12,21 +12,22 @@
 
 #include "minishell.h"
 
-int analize_cd_arguments(t_data_val *d)
+int analize_cd_arguments(t_data_val *data, char **token)
 {
     char *path;
+    char *val;
     
-    path = d->token[1];
-    if (d->token[2])
+    path = token[1];
+    if (token[2])
     {
         ft_putstr_fd("cd: too many arguments\n", 2);
         return 1;
     }
     if (!path || !*path)
-        path = get_env_value("HOME", d->envp);
+        path = get_env_value("HOME", data->envp);
     if (path && path[0] == '$')
     {
-        char *val = get_env_value(path + 1, d->envp);  
+        val = get_env_value(path + 1, data->envp);  
         if (!val || !*val)        
         {
             ft_putstr_fd("cd: ", 2);

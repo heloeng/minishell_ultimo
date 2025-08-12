@@ -6,26 +6,11 @@
 /*   By: dydaniel <dydaniel@student.42sp.org.b      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 10:21:09 by dydaniel          #+#    #+#             */
-/*   Updated: 2025/08/05 22:39:19 by dydaniel         ###   ########.fr       */
+/*   Updated: 2025/08/11 22:16:05 by dydaniel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static int is_builtin(char **argv)
-{
-    static char *b[] = {"echo","pwd","env","cd","export","unset","exit",NULL};
-    int i;
-
-    i = 0;
-    while (b[i])
-    {
-        if (strcmp(argv[0], b[i]) == 0)
-            return (1);
-        i++;
-    }
-    return (0);
-}
 
 void	close_unused_fd(t_data_val *data, int i)
 {
@@ -42,33 +27,55 @@ void	close_unused_fd(t_data_val *data, int i)
 	}
 }
 
-void exec_child_process(t_data_val *data, int i)
+void	exec_child_process(t_data_val *data, int i)
 {
-    int redir_heredoc;
+	int	redir_heredoc;
 
-    redir_heredoc = check_redir_herdoc(data, i);
-    if (i == 0)
-        first_pipe(data, redir_heredoc, i);
-    else if (i == data->num_pipes) 
-        last_pipe(data, redir_heredoc, i);
-    else
-        middles_pipe(data, redir_heredoc, i);
-    if (is_builtin(data->parser[i]))
-    {
-        data->token = data->parser[i];     
-        execute_builtin(data);
-        exit(data->last_exit);               
-    }
-    if (!data->cmd_path[i])                
-    {
-    ft_putstr_fd("minishell: ", 2);
-    ft_putstr_fd(data->parser[i][0], 2);
-    ft_putstr_fd(": command not found\n", 2);
-    exit(127);
-    }
-    execve(data->cmd_path[i], data->parser[i], data->envp);
-    perror("execve falhou");
-    exit(EXIT_FAILURE);
+	redir_heredoc = check_redir_herdoc(data, i);
+	if (i == 0)
+		first_pipe(data, redir_heredoc, i);
+	else if (i == data->num_pipes)
+		last_pipe(data, redir_heredoc, i);
+	else
+		middles_pipe(data, redir_heredoc, i);
+	if (check_builtin(data->parser[i][0]))
+	{
+		execute_builtin(data, data->parser[i]);
+		exit(data->last_exit);
+	}
+	if (!data->cmd_path)
+	{
+		printf("command not found: %s\n", data->parser[i][0]);
+		exit(127);
+	}
+	else
+		execve(data->cmd_path[i], data->parser[i], data->envp);
+	perror("execve falhou");
+	free_data(data);
+	exit(EXIT_FAILURE);
+}
+
+void	one_command_child(t_data_val *data, int i, int flag)
+{
+	while (data->token[i])
+	{
+		if (data->token[i][0] == '>' || data->token[i][0] == '<')
+		{
+			flag = solo_command_redir_heredoc(data->token, i);
+			break ;
+		}
+		i++;
+	}
+	if (flag != NO_RD_HD)
+		data->token = clear_parser(data->token);
+	if (check_builtin(data->token[0]))
+	{
+		execute_builtin(data, data->token);
+		exit(0);
+	}
+	execve(data->cmd_path[0], data->token, data->envp);
+	perror("execve");
+	exit(EXIT_FAILURE);
 }
 
 void	exec_one_command(t_data_val *data, int *status)
@@ -76,39 +83,11 @@ void	exec_one_command(t_data_val *data, int *status)
 	int	i;
 	int	flag;
 
-	if (execute_builtin(data)) {
-        *status = (data->last_exit & 0xFF);
-        return;
-    }
 	i = 0;
 	flag = NO_RD_HD;
 	data->child_pid[0] = fork();
 	if (data->child_pid[0] == 0)
-	{
-		while (data->token[i])
-		{
-			if (data->token[i][0] == '>' || data->token[i][0] == '<')
-			{
-				flag = solo_command_redir_heredoc(data->token, i);
-				break ;
-			}
-			i++;
-		}
-		if (flag != NO_RD_HD)
-			data->token = clear_parser(data->token);
-		if (!data->cmd_path[0])
-		{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(data->token[0], 2);
-		ft_putstr_fd(": command not found\n", 2);
-		free_data(data);
-		exit(127);
-        }
-		execve(data->cmd_path[0], data->token, data->envp);
-		perror("execve");
-		free_data(data);
-		exit(EXIT_FAILURE);
-	}
+		one_command_child(data, i, flag);
 	else if (data->child_pid[0] > 0)
 		waitpid(data->child_pid[0], status, 0);
 	else

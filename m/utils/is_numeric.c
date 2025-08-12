@@ -29,20 +29,3 @@ int	ft_isnumeric(const char *str)
 	}
 	return (1);
 }
-
-int ft_isnumeric_with_sign(const char *s)
-{
-    int i;
-
-    i = 0;
-    if (!s || !*s) return 0;
-    if (s[i] == '+' || s[i] == '-') i++;   
-    if (!s[i]) return 0;                  
-    while (s[i]) {
-        if (!ft_isdigit((unsigned char)s[i])) return 0;
-        i++;
-    }
-    return 1;
-}
-
-

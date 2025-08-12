@@ -12,36 +12,37 @@
 
 #include "minishell.h"
 
-int	ft_export(char **args, t_data_val *data)
+int	ft_export(char **parser_i, t_data_val *data)
 {
     int i;
 	int status;
+    char *tmp;
 
 	status = 0;
     i = 1;
-    while(args[i])
+    tmp = NULL;
+    while(parser_i[i])
     {
-        if (!is_valid_identifier(args[i]))
+        if (!is_valid_identifier(parser_i[i]))
 		{
 			ft_putstr_fd("export: ", 2);
-			ft_putstr_fd(args[i], 2);
+			ft_putstr_fd(parser_i[i], 2);
 			ft_putstr_fd(": not a valid identifier\n", 2);
 			status = 1;          
 		} 
         else
 		{
-            if (!ft_strchr(args[i], '='))          
+            if (!ft_strchr(parser_i[i], '='))          
             {
-                char *tmp = ft_strjoin(args[i], "=");  
+                tmp = ft_strjoin(parser_i[i], "=");  
                 update_env(&data->envp, tmp);
                 free(tmp);
             }
             else                                    
-                update_env(&data->envp, args[i]);
+                update_env(&data->envp, parser_i[i]);
         }     
         i++;
     }
     return (status);
 }
-
 
