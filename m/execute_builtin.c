@@ -79,7 +79,8 @@ int	execute_builtin(t_data_val *data, char **token)
 	int	j;
 	int	flag;
 
-	j = 0;
+	//j = 0;
+	(void)j;
 	flag = check_builtin(token[0]);
 	if (flag == EXIT)
 		return (ft_exit(token));
