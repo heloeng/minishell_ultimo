@@ -1,31 +1,50 @@
 
 #include "minishell.h"
 
-void ft_echo(t_data_val *data, char **parser_i)
+int is_flag_n(const char *arg)
 {
-	int i;
-	int new_line;
+    int j;
 
-	i = 1;
-	new_line = 1;
-	while (parser_i[i] && ft_strncmp(parser_i[i], "-n", 3) == 0)
-	{
-		new_line = 0;
-		i++;
-	}
-	while (data->token[i])
-	{
-        if (parser_i[i][0] == '\'' && parser_i[i][ft_strlen(parser_i[i]) - 1] == '\'' && ft_strlen(parser_i[i]) >= 2)
-            print_single_quoted(parser_i[i]);
-        else if (parser_i[i][0] == '"' && parser_i[i][ft_strlen(parser_i[i]) - 1] == '"' && ft_strlen(parser_i[i]) >= 2)
-            print_double_quoted(data->token[i], data);
-        else if (ft_strchr(parser_i[i], '$') && !was_single_quoted(data->text, parser_i[i]))
-            print_with_expansion(parser_i[i], data);
+    if (!arg || arg[0] != '-' || arg[1] != 'n')
+        return (0);
+    j = 2;
+    while (arg[j] == 'n')
+        j++;
+    return (arg[j] == '\0');
+}
+
+int consume_n_flags(char **args, int *new_line)
+{
+    int i;
+
+    i = 1;
+    *new_line = 1;
+    while (args[i] && is_flag_n(args[i]))
+    {
+        *new_line = 0;
+        i++;
+    }
+    return (i);
+}
+
+void ft_echo(t_data_val *data, char **args)
+{
+    int         i;
+    int         new_line;
+    const char *scan;
+
+    scan = data->text;
+    i = consume_n_flags(args, &new_line);
+    while (args[i])
+    {
+        if (token_was_single_quoted_advance(&scan, args[i]))
+            ft_printf("%s", args[i]);
         else
-            ft_printf("%s", parser_i[i]);
-		if (parser_i[i + 1]) ft_printf(" ");
-		i++;
-	}
-	if (new_line)
-		ft_printf("\n");
+            print_with_expansion(args[i], data);
+        if (args[i + 1])
+            ft_printf(" ");
+        i++;
+    }
+    if (new_line)
+        ft_printf("\n");
 }

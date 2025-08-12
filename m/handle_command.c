@@ -53,9 +53,19 @@ void	exec_pipes(t_data_val *data, int i, int *status)
 		i++;
 	}
 	i = 0;
-	while (data->child_pid[i] && i < data->num_pipes)
+	// while (data->child_pid[i] && i < data->num_pipes)
+	// {
+	// 	waitpid(data->child_pid[i], status, 0);
+	// 	i++;
+	// 		waitpid(data->child_pid[i], status, 0);
+	// }
+	while (i <= data->num_pipes)  
 	{
 		waitpid(data->child_pid[i], status, 0);
+		if (WIFEXITED(*status))
+			data->last_exit = WEXITSTATUS(*status);
+		else if (WIFSIGNALED(*status))
+			data->last_exit = 128 + WTERMSIG(*status);
 		i++;
 	}
 }

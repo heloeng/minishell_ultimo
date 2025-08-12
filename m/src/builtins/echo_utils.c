@@ -12,59 +12,45 @@
 
 #include "minishell.h"
 
-void print_single_quoted(char *token)
+void expand_loop(char *str, t_data_val *data)
 {
-	char *trimmed;
-	int len;
+    int i;
+    int inc;
 
-	len = ft_strlen(token);
-	trimmed = malloc(sizeof(char) * (len - 2 + 1));
-	if (!trimmed)
-		return;
-	ft_strlcpy(trimmed, token + 1, len - 1);
-	ft_printf("%s", trimmed);
-	free(trimmed);
-}
-
-void print_double_quoted(char *token, t_data_val *data)
-{
-	char *trimmed;
-	int len;
-
-	len = ft_strlen(token);
-	trimmed = malloc(sizeof(char) * (len - 2 + 1));
-	if (!trimmed)
-		return;
-	ft_strlcpy(trimmed, token + 1, len - 1);
-	print_with_expansion(trimmed, data);
-	free(trimmed);
+    i = 0;
+    while (str[i])
+    {
+        if (str[i] == '\\' && str[i + 1] == '$')
+        {
+            ft_putchar_fd('$', 1);
+            i += 2;
+            continue;
+        }
+        if (str[i] == '$')
+        {
+            inc = handle_dollar_expansion(str + i, data);
+            i += inc;
+        }
+        else
+        {
+            ft_putchar_fd(str[i], 1);
+            i++;
+        }
+    }
 }
 
 void print_with_expansion(char *str, t_data_val *data)
 {
-	int i;
-	int inc;  
-	char *exit_str; 
-	
-	if (ft_strncmp(str, "$?", 2) == 0 && str[2] == '\0')
-	{
-		exit_str = ft_itoa(data->last_exit);
-		ft_printf("%s", exit_str);
-		free(exit_str);
-		return;
-	}
+    char *exit_str;
 
-	i = 0;
-	while (str[i])
-	{
-		inc = 1;
-		
-		if (str[i] == '$' && !char_inside_quotes(str, i))
-			inc = handle_dollar_expansion(str + i, data);
-		else
-			ft_putchar_fd(str[i], 1);
-		i += inc;
-	}
+    if (str[0] == '$' && str[1] == '?' && str[2] == '\0')
+    {
+        exit_str = ft_itoa(data->last_exit);
+        ft_printf("%s", exit_str);
+        free(exit_str);
+        return;
+    }
+    expand_loop(str, data);
 }
 
 int  handle_dollar_expansion(char *str, t_data_val *data)
@@ -104,58 +90,26 @@ void print_expanded_var(char *var_name, char **envp)
 	ft_printf("%s", value);
 }
 
-char *remove_all_quotes(const char *token)
+// Retorna 1 se a PRÓXIMA ocorrência de `token` a partir de *cursor
+// estiver cercada por aspas simples; move *cursor para depois do token.
+int token_was_single_quoted_advance(const char **cursor, const char *token)
 {
-	int i;
-	int j;
-	char *result;
+    const char *p;
+    size_t      len;
 
-	i = 0,
-	j = 0;
-	
-	result = malloc(ft_strlen(token) + 1);
-	if (!result)
-		return (NULL); 
-	while (token[i])
-	{
-		if (token[i] != '\'' && token[i] != '"')
-			result[j++] = token[i]; 
-		i++;
-	}
-	result[j] = '\0';
-	return result;
-}
+    if (!cursor || !*cursor || !token)
+        return 0;
 
-int	was_single_quoted(const char *cmdline, const char *token)
-{
-	const char	*p;
-	size_t		len;
-
-	p = cmdline;
     len = ft_strlen(token);
-	while ((p = ft_strnstr(p, token, ft_strlen(p))))
-	{
-		if (p > cmdline && *(p - 1) == '\''         
-			&& *(p + len) == '\'')                   
-			return (1);
-		p += len;                                 
-	}
-	return (0);
+    p = ft_strnstr(*cursor, token, ft_strlen(*cursor));
+    if (!p)
+        return 0;
+    if (p > *cursor && *(p - 1) == '\'' && *(p + len) == '\'')
+    {
+        *cursor = p + len;
+        return 1;
+    }
+    *cursor = p + len;
+    return 0;
 }
-
-/*char *get_env_value(char *name, char **envp)
-{
-	int     i;
-	size_t  len;
-
-	len = ft_strlen(name);
-	i = 0;
-	while (envp[i])
-	{
-		if (!ft_strncmp(envp[i], name, len) && envp[i][len] == '=')
-			return (envp[i] + len + 1); 
-		i++;
-	}
-	return (""); 
-}*/
 

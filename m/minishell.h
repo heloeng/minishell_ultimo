@@ -88,15 +88,19 @@ int		execute_builtin(t_data_val *data, char **token);
 
 //echo
 void	ft_echo(t_data_val *data, char **parser_i);
+int 	is_flag_n(const char *arg);
+int		consume_n_flags(char **args, int *new_line);
+
 
 //echo utils
-void	print_single_quoted(char *token);
-void	print_double_quoted(char *token, t_data_val *data);
 void	print_with_expansion(char *str, t_data_val *data);
 int		handle_dollar_expansion(char *str, t_data_val *data);
 void	print_expanded_var(char *var_name, char **envp);
-char	*remove_all_quotes(const char *token);
-int		was_single_quoted(const char *cmdline, const char *token);
+int 	token_was_single_quoted_advance(const char **cursor, const char *token);
+void 	expand_loop(char *str, t_data_val *data);
+
+
+
 
 //unset
 void	ft_unset(char ***envp, char *name);
