@@ -6,7 +6,7 @@
 /*   By: helde-so <helde-so@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 23:01:49 by dydaniel          #+#    #+#             */
-/*   Updated: 2025/08/13 19:59:38 by helde-so         ###   ########.fr       */
+/*   Updated: 2025/08/13 20:19:25 by helde-so         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void	configure_signal()
 
 void change_signal_exec(t_data_val *data, int *status)
 {
+	int sig;
 	if (WIFEXITED(*status))
 	{
 		data->last_exit = WEXITSTATUS(*status);
@@ -38,7 +39,7 @@ void change_signal_exec(t_data_val *data, int *status)
 	}
 	else if (WIFSIGNALED(*status))
 	{
-		int sig = WTERMSIG(*status);
+		sig = WTERMSIG(*status);
 		data->last_exit = 128 + sig;
 
 		if (sig == SIGINT) // Ctrl+C
