@@ -6,7 +6,7 @@
 /*   By: helde-so <helde-so@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 16:54:54 by dydaniel          #+#    #+#             */
-/*   Updated: 2025/07/15 20:55:17 by helde-so         ###   ########.fr       */
+/*   Updated: 2025/08/13 19:29:35 by helde-so         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ void recive_inputs(t_data_val *data)
             free_data(data);
             break;
         }
+        data->last_exit = g_exit_status;//ALTEREI AQUI/// ---------------
         data->text = complete_unclosed_quote(data->text);
         if (validate_pipe_syntax(data->text))
         {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_childs.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dydaniel <dydaniel@student.42sp.org.b      +#+  +:+       +#+        */
+/*   By: helde-so <helde-so@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 10:21:09 by dydaniel          #+#    #+#             */
-/*   Updated: 2025/08/11 22:16:05 by dydaniel         ###   ########.fr       */
+/*   Updated: 2025/08/13 20:06:25 by helde-so         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,10 @@ void	close_unused_fd(t_data_val *data, int i)
 void	exec_child_process(t_data_val *data, int i)
 {
 	int	redir_heredoc;
+
+	//filhos devem usar comportamento padrão para sinais
+	signal(SIGINT, SIG_DFL); //ALTEREI AQUI -----
+	signal(SIGQUIT, SIG_DFL);//ALTEREI AQUI ----
 
 	redir_heredoc = check_redir_herdoc(data, i);
 	if (i == 0)
@@ -57,6 +61,9 @@ void	exec_child_process(t_data_val *data, int i)
 
 void	one_command_child(t_data_val *data, int i, int flag)
 {
+	//filhos devem usar comportamento padrão para sinais
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 	while (data->token[i])
 	{
 		if (data->token[i][0] == '>' || data->token[i][0] == '<')
@@ -92,10 +99,6 @@ void	exec_one_command(t_data_val *data, int *status)
 	{
 		waitpid(data->child_pid[0], status, 0);
 		change_signal_exec(data, status);
-		// if (WIFEXITED(*status))
-		// 	data->last_exit = WEXITSTATUS(*status);
-		// else if (WIFSIGNALED(*status))
-		// 	data->last_exit = 128 + WTERMSIG(*status);
 	}
 	else
 		perror("fork");
