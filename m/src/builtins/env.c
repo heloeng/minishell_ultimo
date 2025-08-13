@@ -6,7 +6,7 @@
 /*   By: dydaniel <dydaniel@student.42sp.org.b      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 22:08:15 by dydaniel          #+#    #+#             */
-/*   Updated: 2025/08/11 22:08:18 by dydaniel         ###   ########.fr       */
+/*   Updated: 2025/08/12 22:45:16 by helde-so         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,8 @@ void	ft_env(t_data_val *data, char **token)
 
 char	*get_env_value(char *name, char **envp)
 {
-	int	i;
 	size_t	len;
-
+	int		i;
 
 	len = ft_strlen(name);
 	i = 0;

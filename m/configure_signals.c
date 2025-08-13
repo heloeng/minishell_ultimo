@@ -26,3 +26,11 @@ void	configure_signal()
 	signal(SIGINT, handle_ctrlc);
 	signal(SIGQUIT, SIG_IGN);
 }
+
+void change_signal_exec(t_data_val *data, int *status)
+{
+	if (WIFEXITED(*status))
+		data->last_exit = WEXITSTATUS(*status);
+	else if (WIFSIGNALED(*status))
+		data->last_exit = 128 + WTERMSIG(*status);
+}

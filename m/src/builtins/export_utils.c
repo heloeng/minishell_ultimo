@@ -1,32 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execute_builtin_export.c                           :+:      :+:    :+:   */
+/*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: helde-so <helde-so@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 19:34:55 by helde-so          #+#    #+#             */
-/*   Updated: 2025/06/30 19:34:56 by helde-so         ###   ########.fr       */
+/*   Updated: 2025/08/12 23:10:20 by helde-so         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-
-int is_valid_identifier(char *arg)
+int	is_valid_identifier(char *arg)
 {
-    int i;
+	int	i;
 
-    i = 0;
-    if(!ft_isalpha(arg[0]) && arg[0] != '_')
-        return (0);
-    while(arg[i] && arg[i] != '=')
-    {
-        if(!ft_isalnum(arg[i]) && arg[i] != '_')
-            return (0);
-        i++;
-    }
-    return (1);
+	i = 0;
+	if (!ft_isalpha(arg[0]) && arg[0] != '_')
+		return (0);
+	while (arg[i] && arg[i] != '=')
+	{
+		if (!ft_isalnum(arg[i]) && arg[i] != '_')
+			return (0);
+		i++;
+	}
+	return (1);
 }
 
 void	update_env(char ***envp, char *arg)
@@ -36,17 +35,17 @@ void	update_env(char ***envp, char *arg)
 
 	equal = ft_strchr(arg, '=');
 	if (!equal)
-		return; 
+		return ;
 	name = ft_substr(arg, 0, equal - arg);
 	if (!name)
-    	return;
+		return ;
 	if (replace_existing_var(*envp, name, arg))
 	{
-		free(name); 
-		return; 
+		free(name);
+		return ;
 	}
-	add_new_var(envp, arg);	
-	free(name); 
+	add_new_var(envp, arg);
+	free (name);
 }
 
 int	replace_existing_var(char **envp, char *name, char *arg)
@@ -70,7 +69,7 @@ int	replace_existing_var(char **envp, char *name, char *arg)
 		}
 		i++;
 	}
-	return (0); 
+	return (0);
 }
 
 void	add_new_var(char ***envp, char *arg)
@@ -84,7 +83,7 @@ void	add_new_var(char ***envp, char *arg)
 		count++;
 	new_env = malloc(sizeof(char *) * (count + 2));
 	if (!new_env)
-		return;
+		return ;
 	i = 0;
 	while (i < count)
 	{
@@ -99,5 +98,3 @@ void	add_new_var(char ***envp, char *arg)
 	free(*envp);
 	*envp = new_env;
 }
-
-

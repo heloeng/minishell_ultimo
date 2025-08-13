@@ -76,11 +76,8 @@ int	builtin_pack_2(t_data_val *data, char **token, int flag)
 
 int	execute_builtin(t_data_val *data, char **token)
 {
-	int	j;
 	int	flag;
 
-	//j = 0;
-	(void)j;
 	flag = check_builtin(token[0]);
 	if (flag == EXIT)
 		return (ft_exit(token));

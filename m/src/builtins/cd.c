@@ -6,30 +6,30 @@
 /*   By: helde-so <helde-so@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 11:07:39 by helde-so          #+#    #+#             */
-/*   Updated: 2025/07/26 11:08:05 by helde-so         ###   ########.fr       */
+/*   Updated: 2025/08/12 22:36:21 by helde-so         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int run_cd(char *path)
+int	run_cd(char *path)
 {
-    char cwd[1024];
-    char *oldpwd;
-   
-    oldpwd = getcwd(NULL, 0);
-    if (!oldpwd)                       
-    {
-        perror("cd");
-        return (1);
-    }
-    if (chdir(path) == -1)             
-    {
-        perror("cd");                   
-        free(oldpwd);
-        return (1);
-    }
-    setenv("OLDPWD", oldpwd, 1);//Não é função autorizada
+	char	cwd[1024];
+	char	*oldpwd;
+
+	oldpwd = getcwd(NULL, 0);
+	if (!oldpwd)
+	{
+		perror("cd");
+		return (1);
+	}
+	if (chdir(path) == -1)
+	{
+		perror("cd");
+		free(oldpwd);
+		return (1);
+	}
+	setenv("OLDPWD", oldpwd, 1);//Não é função autorizada
     free(oldpwd);
 
     if (getcwd(cwd, sizeof(cwd)))

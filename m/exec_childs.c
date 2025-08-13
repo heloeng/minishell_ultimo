@@ -88,15 +88,14 @@ void	exec_one_command(t_data_val *data, int *status)
 	data->child_pid[0] = fork();
 	if (data->child_pid[0] == 0)
 		one_command_child(data, i, flag);
-	// else if (data->child_pid[0] > 0)
-	// 	waitpid(data->child_pid[0], status, 0);
 	else if (data->child_pid[0] > 0)
 	{
 		waitpid(data->child_pid[0], status, 0);
-		if (WIFEXITED(*status))
-			data->last_exit = WEXITSTATUS(*status);
-		else if (WIFSIGNALED(*status))
-			data->last_exit = 128 + WTERMSIG(*status);
+		change_signal_exec(data, status);
+		// if (WIFEXITED(*status))
+		// 	data->last_exit = WEXITSTATUS(*status);
+		// else if (WIFSIGNALED(*status))
+		// 	data->last_exit = 128 + WTERMSIG(*status);
 	}
 	else
 		perror("fork");

@@ -73,6 +73,7 @@ int		char_inside_quotes(const char *str, int index);
 
 //PREPROCESSORS
 char	*get_env_value(char *name, char **envp);
+void	change_signal_exec(t_data_val *data, int *status);
 void	configure_signal(void);
 
 //validate pipe
@@ -88,9 +89,6 @@ int		execute_builtin(t_data_val *data, char **token);
 
 //echo
 void	ft_echo(t_data_val *data, char **parser_i);
-int 	is_flag_n(const char *arg);
-int		consume_n_flags(char **args, int *new_line);
-
 
 //echo utils
 void	print_with_expansion(char *str, t_data_val *data);
@@ -98,8 +96,6 @@ int		handle_dollar_expansion(char *str, t_data_val *data);
 void	print_expanded_var(char *var_name, char **envp);
 int 	token_was_single_quoted_advance(const char **cursor, const char *token);
 void 	expand_loop(char *str, t_data_val *data);
-
-
 
 
 //unset
