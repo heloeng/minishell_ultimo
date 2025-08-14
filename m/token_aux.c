@@ -21,6 +21,7 @@ void	size_of_quote_aux(char *text, int *i, int *size, int *val)
 		if (text[*i] == '"' || text[*i] == '\'')
 		{
 			quote = text[*i];
+			(void)quote;
 			(*i)++;
 			*val = 1;
 			break ;

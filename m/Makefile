@@ -43,6 +43,7 @@ SOURCES = \
 	  $(BUILDINS_DIR)/echo.c \
 	  $(BUILDINS_DIR)/echo_utils.c \
 	  $(BUILDINS_DIR)/unset.c \
+	  $(BUILDINS_DIR)/unset_utils.c \
 	  $(BUILDINS_DIR)/export.c \
 	  $(BUILDINS_DIR)/export_utils.c \
 	  $(BUILDINS_DIR)/cd.c \
