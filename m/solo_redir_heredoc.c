@@ -16,6 +16,12 @@ void	solo_append(char **token, int *i, int *flag, int *fd)
 {
 	*flag = APPEND;
 	*fd = open(token[(*i) + 1], O_WRONLY | O_CREAT | O_APPEND, 0644);
+	if (*fd == -1)
+	{
+		perror(token[(*i) + 1]);
+		close(*fd);
+		exit(EXIT_FAILURE);
+	}
 	(*i)++;
 }
 
@@ -23,6 +29,11 @@ void	solo_redir_in(char **token, int *i, int *flag, int *fd)
 {
 	*flag = RD_IN;
 	*fd = open(token[(*i) + 1], O_RDONLY);
+	if (*fd == -1)
+	{
+		perror(token[(*i) + 1]);
+		exit(EXIT_FAILURE);
+	}
 	(*i)++;
 }
 
@@ -30,6 +41,11 @@ void	solo_redir_out(char **token, int *i, int *flag, int *fd)
 {
 	*flag = RD_OUT;
 	*fd = open(token[(*i) + 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (*fd == -1)
+	{
+		perror(token[(*i) + 1]);
+		exit(EXIT_FAILURE);
+	}
 	(*i)++;
 }
 
@@ -38,7 +54,6 @@ void	solo_heredoc(char **token, int *i, int *flag, int *fd)
 	*flag = HEREDOC;
 	solo_heredoc_fd(token, *i, fd);
 	dup2(*fd, STDIN_FILENO);
-	close(*fd);
 	(*i)++;
 }
 

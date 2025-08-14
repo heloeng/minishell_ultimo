@@ -26,6 +26,7 @@
 # include <limits.h>
 # include <fcntl.h> 
 
+
 typedef struct s_data_val
 {
 	int		argc;
@@ -75,6 +76,7 @@ int		char_inside_quotes(const char *str, int index);
 char	*get_env_value(char *name, char **envp);
 void	change_signal_exec(t_data_val *data, int *status);
 void	configure_signal(void);
+void	configure_signal_childs(void);
 
 //validate pipe
 int		validate_pipe_syntax(const char *input);
@@ -164,6 +166,7 @@ int		size_of_string(char *text);
 int		size_of_quote(char *text);
 char	*check_path(t_data_val *data, char *cmd);
 void	get_full_path(t_data_val **data);
+void	change_dolar_sign(char ***token);
 
 //PARSER
 void	parse_token(t_data_val **data);

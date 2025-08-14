@@ -31,10 +31,7 @@ void	exec_child_process(t_data_val *data, int i)
 {
 	int	redir_heredoc;
 
-	//filhos devem usar comportamento padrão para sinais
-	signal(SIGINT, SIG_DFL); //ALTEREI AQUI -----
-	signal(SIGQUIT, SIG_DFL);//ALTEREI AQUI ----
-
+	configure_signal_childs();
 	redir_heredoc = check_redir_herdoc(data, i);
 	if (i == 0)
 		first_pipe(data, redir_heredoc, i);
@@ -47,7 +44,7 @@ void	exec_child_process(t_data_val *data, int i)
 		execute_builtin(data, data->parser[i]);
 		exit(data->last_exit);
 	}
-	if (!data->cmd_path)
+	if (!data->cmd_path[i])
 	{
 		printf("command not found: %s\n", data->parser[i][0]);
 		exit(127);
@@ -80,6 +77,11 @@ void	one_command_child(t_data_val *data, int i, int flag)
 		execute_builtin(data, data->token);
 		exit(0);
 	}
+	if (!data->cmd_path[0])
+	{
+		perror("command not found");
+		exit(1);
+	}
 	execve(data->cmd_path[0], data->token, data->envp);
 	perror("execve");
 	exit(EXIT_FAILURE);
@@ -94,7 +96,9 @@ void	exec_one_command(t_data_val *data, int *status)
 	flag = NO_RD_HD;
 	data->child_pid[0] = fork();
 	if (data->child_pid[0] == 0)
+	{
 		one_command_child(data, i, flag);
+	}
 	else if (data->child_pid[0] > 0)
 	{
 		waitpid(data->child_pid[0], status, 0);

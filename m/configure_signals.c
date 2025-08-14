@@ -22,7 +22,7 @@ void	handle_ctrlc(int sig)
 	g_exit_status = 130; //ALTEREI AQUI/// ---------------
 }
 
-void	configure_signal()
+void	configure_signal(void)
 {
 	signal(SIGINT, handle_ctrlc);//TRATA CTRL+C 
 	signal(SIGQUIT, SIG_IGN);//IGNORA CTRL+C
@@ -51,3 +51,8 @@ void change_signal_exec(t_data_val *data, int *status)
 }
 	
 	
+void	configure_signal_childs(void)
+{
+	signal(SIGINT, SIG_DFL); 
+	signal(SIGQUIT, SIG_DFL);
+}
