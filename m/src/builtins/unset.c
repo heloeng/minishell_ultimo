@@ -18,13 +18,11 @@ void	ft_unset(char ***envp, char *name)
 	char	**new;
 
 	if (!envp || !*envp || !name)
-		return;
+		return ;
 	old = *envp;
 	new = build_new_env(old, name);
 	if (!new)
-		return;
+		return ;
 	free(old);
 	*envp = new;
 }
-
-
