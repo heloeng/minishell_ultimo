@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-void export(char **parser_i, int i, int *status)
+void	export(char **parser_i, int i, int *status)
 {
 	ft_putstr_fd("export: ", 2);
 	ft_putstr_fd(parser_i[i], 2);
@@ -22,15 +22,14 @@ void export(char **parser_i, int i, int *status)
 
 int	ft_export(char **parser_i, t_data_val *data)
 {
-	int	i;
-	int	status;
-	char *tmp;
+	int		i;
+	int		status;
+	char	*tmp;
 
 	status = 0;
 	i = 1;
 	tmp = NULL;
-
-	while(parser_i[i])
+	while (parser_i[i])
 	{
 		if (!is_valid_identifier(parser_i[i]))
 			export(parser_i, i, &status);
