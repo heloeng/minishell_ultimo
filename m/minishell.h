@@ -6,7 +6,7 @@
 /*   By: helde-so <helde-so@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 20:20:08 by dydaniel          #+#    #+#             */
-/*   Updated: 2025/08/11 23:04:32 by dydaniel         ###   ########.fr       */
+/*   Updated: 2025/08/13 22:40:31 by helde-so         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MINISHELL_H
 
 # include <stdlib.h>
+# include <string.h>
 # include <stdio.h>
 # include <stddef.h>
 # include <readline/readline.h>

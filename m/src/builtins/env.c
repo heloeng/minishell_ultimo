@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dydaniel <dydaniel@student.42sp.org.b      +#+  +:+       +#+        */
+/*   By: helde-so <helde-so@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 22:08:15 by dydaniel          #+#    #+#             */
-/*   Updated: 2025/08/12 22:45:16 by helde-so         ###   ########.fr       */
+/*   Updated: 2025/08/13 22:31:41 by helde-so         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "minishell.h"
 
 void	ft_env(t_data_val *data, char **token)
 {
