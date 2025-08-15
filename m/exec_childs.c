@@ -31,7 +31,8 @@ void	exec_child_process(t_data_val *data, int i)
 {
 	int	redir_heredoc;
 
-	configure_signal_childs();
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 	redir_heredoc = check_redir_herdoc(data, i);
 	if (i == 0)
 		first_pipe(data, redir_heredoc, i);
@@ -41,7 +42,7 @@ void	exec_child_process(t_data_val *data, int i)
 		middles_pipe(data, redir_heredoc, i);
 	if (check_builtin(data->parser[i][0]))
 	{
-		execute_builtin(data, data->parser[i]);
+		data->last_exit = execute_builtin(data, data->parser[i]);
 		exit(data->last_exit);
 	}
 	if (!data->cmd_path[i])
@@ -53,12 +54,11 @@ void	exec_child_process(t_data_val *data, int i)
 		execve(data->cmd_path[i], data->parser[i], data->envp);
 	perror("execve falhou");
 	free_data(data);
-	exit(EXIT_FAILURE);
+	exit(1);
 }
 
 void	one_command_child(t_data_val *data, int i, int flag)
 {
-	//filhos devem usar comportamento padrão para sinais
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
 	while (data->token[i])
@@ -74,17 +74,17 @@ void	one_command_child(t_data_val *data, int i, int flag)
 		data->token = clear_parser(data->token);
 	if (check_builtin(data->token[0]))
 	{
-		execute_builtin(data, data->token);
-		exit(0);
+		if (execute_builtin(data, data->token) == 1)
+			exit(0);
 	}
 	if (!data->cmd_path[0])
 	{
 		perror("command not found");
-		exit(1);
+		exit(127);
 	}
 	execve(data->cmd_path[0], data->token, data->envp);
 	perror("execve");
-	exit(EXIT_FAILURE);
+	exit(1);
 }
 
 void	exec_one_command(t_data_val *data, int *status)
@@ -94,6 +94,9 @@ void	exec_one_command(t_data_val *data, int *status)
 
 	i = 0;
 	flag = NO_RD_HD;
+	//Antes do fork verifica se o comando é cd/export/unset/exit. //se for builtin do pai executa sem fork
+	if (run_parent_builtin_single(data, status))//!alterei aqui
+		return ;
 	data->child_pid[0] = fork();
 	if (data->child_pid[0] == 0)
 	{
@@ -102,8 +105,15 @@ void	exec_one_command(t_data_val *data, int *status)
 	else if (data->child_pid[0] > 0)
 	{
 		waitpid(data->child_pid[0], status, 0);
+		if (WIFEXITED(*status))
+			g_exit_status = WEXITSTATUS(*status);
+		else if (WIFSIGNALED(*status))
+			g_exit_status = 128 + WTERMSIG(*status);
+		data->last_exit = g_exit_status;
 		change_signal_exec(data, status);
 	}
 	else
 		perror("fork");
 }
+
+

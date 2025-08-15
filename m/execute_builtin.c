@@ -39,16 +39,19 @@ int	builtin_pack_1(t_data_val *data, char **token, int flag)
 	if (flag == PWD)
 	{
 		ft_pwd();
+		g_exit_status = 0;
 		return (1);
 	}
 	if (flag == ENV)
 	{
 		ft_env(data, token);
+		g_exit_status = data->last_exit;
 		return (1);
 	}
 	if (flag == ECHO)
 	{
 		ft_echo(data, token);
+		g_exit_status = 0;
 		return (1);
 	}
 	if (flag == CD)
@@ -64,6 +67,7 @@ int	builtin_pack_2(t_data_val *data, char **token, int flag)
 	if (flag == UNSET)
 	{
 		ft_unset_args(token, data);
+		g_exit_status = 0;
 		return (1);
 	}
 	if (flag == EXPORT)
@@ -81,6 +85,8 @@ int	execute_builtin(t_data_val *data, char **token)
 	flag = check_builtin(token[0]);
 	if (flag == EXIT)
 		return (ft_exit(token));
+	if (flag == NO_BUILTIN)
+		return (0);
 	else if (builtin_pack_1(data, token, flag) || \
 			builtin_pack_2(data, token, flag))
 		return (1);

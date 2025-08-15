@@ -29,3 +29,26 @@ int	ft_isnumeric(const char *str)
 	}
 	return (1);
 }
+
+#include "minishell.h"
+
+int	ft_isnumeric_1(const char *str)
+{
+	int	i;
+
+	if (!str || !*str)
+		return (0);
+	if (*str == '+' || *str == '-')
+		str++;
+	if (*str == '\0')
+		return (0);
+	i = 0;
+	while (str[i])
+	{
+		if (!ft_isdigit((unsigned char)str[i]))
+			return (0);
+		i++;
+	}
+	return (1);
+}
+

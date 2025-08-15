@@ -6,13 +6,13 @@
 /*   By: helde-so <helde-so@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 11:07:39 by helde-so          #+#    #+#             */
-/*   Updated: 2025/08/12 22:36:21 by helde-so         ###   ########.fr       */
+/*   Updated: 2025/08/14 20:01:19 by dydaniel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	run_cd(char *path)
+int	run_cd(t_data_val *data, char *path)
 {
 	char	cwd[1024];
 	char	*oldpwd;
@@ -29,10 +29,7 @@ int	run_cd(char *path)
 		free(oldpwd);
 		return (1);
 	}
-	setenv("OLDPWD", oldpwd, 1);//Não é função autorizada
-    free(oldpwd);
-
-    if (getcwd(cwd, sizeof(cwd)))
-        setenv("PWD", cwd, 1);//Não é função autorizada
-    return (0);                            
+	update_pwd(data, oldpwd, cwd, sizeof(cwd));
+	free(oldpwd);
+	return (0);
 }

@@ -104,7 +104,7 @@ int	num_tokens(char *text)
 	int	op_len;
 
 	j = 0;
-	while (*text)
+	while (*text && *text != '\n')
 	{
 		while (*text && ft_isspace(*text))
 			text++;

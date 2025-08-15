@@ -76,7 +76,7 @@ void	change_fd(t_data_val *data, int redir_heredoc, int i, int j)
 	if (!data->parser[i][j + 1])
 	{
 		printf("Syntax error with abscense of token\n");
-		exit (EXIT_FAILURE);
+		exit(EXIT_FAILURE);
 	}
 	open_file(&file_fd, redir_heredoc, data->parser[i][j + 1]);
 	if (file_fd == -1)

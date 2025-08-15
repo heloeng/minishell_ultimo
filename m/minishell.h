@@ -25,7 +25,8 @@
 # include <sys/types.h> 
 # include <sys/wait.h>  
 # include <limits.h>
-# include <fcntl.h> 
+# include <fcntl.h>
+# include <errno.h>
 
 
 typedef struct s_data_val
@@ -90,6 +91,7 @@ int		ends_with_pipe(const char *input);
 int		check_builtin(char *cmd);
 int		execute_builtin(t_data_val *data, char **token);
 
+
 //echo
 void	ft_echo(t_data_val *data, char **parser_i);
 
@@ -107,8 +109,11 @@ int		ft_unset_args(char **args, t_data_val *data);
 char	**build_new_env(char **old, const char *name);
 
 //cd
-int		run_cd(char *path);
+int		run_cd(t_data_val *data, char *path);
 int		analize_cd_arguments(t_data_val *data, char **token);
+void	update_pwd(t_data_val *data, const char *oldpwd, char *cwd, size_t n);
+int	    cd_to_oldpwd(t_data_val *data);
+
 
 //exit
 int		ft_exit(char **parser_i);
@@ -130,6 +135,7 @@ int		ft_export(char **args, t_data_val *data);
 
 //general auxiliars fuctions
 int		ft_isnumeric(const char *str);
+int	    ft_isnumeric_1(const char *str);
 int		ft_isdigit(int c);
 int		ft_isalnum(int c);
 void	ft_putstr_fd(const char *s, int fd);
@@ -183,6 +189,13 @@ void	first_pipe(t_data_val *data, int flag, int i);
 void	middles_pipe(t_data_val *data, int flag, int i);
 void	last_pipe(t_data_val *data, int flag, int i);
 char	**clear_parser(char **parser);
+
+//exec parent
+int		is_parent_builtin(int flag);
+void	save_stdio(int *save_in, int *save_out);
+void	restore_stdio(int save_in, int save_out);
+int		parent_builtin_apply_redirs(t_data_val *data);
+int		run_parent_builtin_single(t_data_val *data, int *status);
 
 //REDIR_HEREDOC
 int		check_redir_herdoc(t_data_val *data, int i);

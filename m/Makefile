@@ -42,8 +42,8 @@ SOURCES = \
 	  $(DIR_UTILS)/ft_strnstr.c\
 	  $(BUILDINS_DIR)/echo.c \
 	  $(BUILDINS_DIR)/echo_utils.c \
-	  $(BUILDINS_DIR)/unset.c \
 	  $(BUILDINS_DIR)/unset_utils.c \
+	  $(BUILDINS_DIR)/unset.c \
 	  $(BUILDINS_DIR)/export.c \
 	  $(BUILDINS_DIR)/export_utils.c \
 	  $(BUILDINS_DIR)/cd.c \
@@ -56,8 +56,8 @@ SOURCES = \
 	  exec_pipes.c solo_redir_heredoc.c\
 	  execute_builtin.c parser_clear.c heredoc.c\
 	  validate_inputs.c\
-	  duplicate_envp.c free_data.c
-
+	  duplicate_envp.c free_data.c\
+	  exec_parent_builtin.c
 
 OBJECTS = $(SOURCES:.c=.o)
 

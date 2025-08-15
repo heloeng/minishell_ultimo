@@ -20,7 +20,7 @@ void	solo_append(char **token, int *i, int *flag, int *fd)
 	{
 		perror(token[(*i) + 1]);
 		close(*fd);
-		exit(EXIT_FAILURE);
+		exit(1);
 	}
 	(*i)++;
 }
@@ -32,7 +32,7 @@ void	solo_redir_in(char **token, int *i, int *flag, int *fd)
 	if (*fd == -1)
 	{
 		perror(token[(*i) + 1]);
-		exit(EXIT_FAILURE);
+		exit(1);
 	}
 	(*i)++;
 }
@@ -44,7 +44,7 @@ void	solo_redir_out(char **token, int *i, int *flag, int *fd)
 	if (*fd == -1)
 	{
 		perror(token[(*i) + 1]);
-		exit(EXIT_FAILURE);
+		exit(1);
 	}
 	(*i)++;
 }
